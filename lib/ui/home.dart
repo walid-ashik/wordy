@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
               child: GestureDetector(
                   onTap: () {
                     //goto home page
-                    gotoGamePlay(context);
+                    gotoGamePlay(context, categories[index]);
 
                     debugPrint('tapped: ${categories[index].name}');
                   },
@@ -99,12 +99,12 @@ class HomePage extends StatelessWidget {
         });
   }
 
-  void gotoGamePlay(BuildContext context) {
+  void gotoGamePlay(BuildContext context, Category category) {
      //goto home page
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => GamePlayPage(),
+        builder: (context) => GamePlayPage(category),
       ),
     );
 

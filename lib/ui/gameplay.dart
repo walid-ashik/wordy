@@ -1,20 +1,29 @@
+import 'package:Wordy/ui/home.dart';
+import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
 
 class GamePlayPage extends StatefulWidget {
+
+  final Category category;
+  GamePlayPage(this.category) : super();
+
   @override
-  _GamePlayPageState createState() => _GamePlayPageState();
+  _GamePlayPageState createState() => _GamePlayPageState(category);
 }
 
 class _GamePlayPageState extends State<GamePlayPage> {
 
-  var categoryName;
+  Category category;
+  _GamePlayPageState(Category category){
+    this.category = category;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: HexColor('${category.color}'),
       body: Center(
-        child: Text('yes'),
+        child: Text('${category.name}'),
       ),
     );
   }
