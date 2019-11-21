@@ -2,10 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:Wordy/util/utils.dart';
 
 class HomePage extends StatelessWidget {
+  var userPoints = 17;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        brightness: Brightness.dark,
+        toolbarOpacity: 0.5,
+        title: Text(
+          "Categories",
+          style: TextStyle(color: HexColor('#444444'), fontSize: 14.0),
+        ),
+        actions: <Widget>[
+          Center(
+            child: Text(
+              "Point: $userPoints      ",
+              style: TextStyle(
+                  color: HexColor('#444444'),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600),
+            ),
+          )
+        ],
+      ),
       body: getCategoryListView(),
     );
   }
@@ -32,9 +56,9 @@ class HomePage extends StatelessWidget {
           return Container(
               height: 120.0,
               child: GestureDetector(
-                onTap: (){
-                  debugPrint('tapped: ${categories[index].name}');
-                },
+                  onTap: () {
+                    debugPrint('tapped: ${categories[index].name}');
+                  },
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -42,7 +66,7 @@ class HomePage extends StatelessWidget {
                       elevation: 0,
                       color: HexColor(categories[index].color),
                       margin: EdgeInsets.only(
-                          left: 15.0, right: 15.0, top: 7.5, bottom: 7.5),
+                          left: 15.0, right: 15.0, top: 0.0, bottom: 15.0),
                       child: Column(
                         children: <Widget>[
                           Spacer(),
@@ -53,7 +77,7 @@ class HomePage extends StatelessWidget {
                             categories[index].name,
                             style: TextStyle(
                                 color: HexColor('#444444'),
-                                fontSize: 24.0,
+                                fontSize: 22.0,
                                 fontWeight: FontWeight.bold),
                           ),
                           Spacer(),
@@ -61,7 +85,7 @@ class HomePage extends StatelessWidget {
                             children: <Widget>[
                               Spacer(),
                               Icon(Icons.lock,
-                                  color: HexColor('#444444'), size: 20.0),
+                                  color: HexColor('#444444'), size: 16.0),
                               Text('   ')
                             ],
                           ),
