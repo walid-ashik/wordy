@@ -1,3 +1,4 @@
+import 'package:Wordy/ui/gameplay.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordy/util/utils.dart';
 
@@ -57,6 +58,9 @@ class HomePage extends StatelessWidget {
               height: 120.0,
               child: GestureDetector(
                   onTap: () {
+                    //goto home page
+                    gotoGamePlay(context);
+
                     debugPrint('tapped: ${categories[index].name}');
                   },
                   child: Card(
@@ -93,6 +97,17 @@ class HomePage extends StatelessWidget {
                         ],
                       ))));
         });
+  }
+
+  void gotoGamePlay(BuildContext context) {
+     //goto home page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GamePlayPage(),
+      ),
+    );
+
   }
 }
 

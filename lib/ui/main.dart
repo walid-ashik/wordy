@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
       Duration(seconds: 3),
       () {
         //goto home page
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(),
