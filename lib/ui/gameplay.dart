@@ -13,9 +13,11 @@ class GamePlayPage extends StatefulWidget {
 
 class _GamePlayPageState extends State<GamePlayPage> {
   Category category;
+  var homeText = "";
 
   _GamePlayPageState(Category category) {
     this.category = category;
+    homeText = category.name;
   }
 
   @override
@@ -31,9 +33,14 @@ class _GamePlayPageState extends State<GamePlayPage> {
           children: <Widget>[
             Expanded(
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: HexColor('#444444'),),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: HexColor('#444444'),
+                ),
                 onPressed: () {
-                  debugPrint('clicked');
+                  setState(() {
+                    homeText = 'back clicked';
+                  });
                 },
               ),
             ),
@@ -41,7 +48,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
               child: IconButton(
                 icon: Icon(Icons.arrow_forward, color: HexColor('#444444')),
                 onPressed: () {
-                  debugPrint('clicked2');
+                  setState(() {
+                    homeText = 'forward clicked';
+                  });
                 },
               ),
             ),
@@ -49,7 +58,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
               child: IconButton(
                 icon: Icon(Icons.refresh, color: HexColor('#444444')),
                 onPressed: () {
-                  debugPrint('clicked3');
+                  setState(() {
+                    homeText = 'reload clicked';
+                  });
                 },
               ),
             ),
@@ -57,7 +68,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
               child: IconButton(
                 icon: Icon(Icons.check, color: HexColor('#444444')),
                 onPressed: () {
-                  debugPrint('clicked4');
+                  setState(() {
+                    homeText = 'check clicked';
+                  });
                 },
               ),
             ),
@@ -65,7 +78,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
         ),
       ),
       body: Center(
-        child: Text('${category.name}'),
+        child: Text('$homeText'),
       ),
     );
   }
