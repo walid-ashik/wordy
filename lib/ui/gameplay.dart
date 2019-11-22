@@ -14,6 +14,8 @@ class GamePlayPage extends StatefulWidget {
 class _GamePlayPageState extends State<GamePlayPage> {
   Category category;
   var homeText = "";
+  var userScore = 3;
+  var totalScroe = 10;
 
   _GamePlayPageState(Category category) {
     this.category = category;
@@ -77,48 +79,37 @@ class _GamePlayPageState extends State<GamePlayPage> {
           ],
         ),
       ),
-      body: Center(
-        child: Text('$homeText'),
+      body: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 80.0),
+            child: Text(
+              '$userScore/$totalScroe',
+              style: TextStyle(
+                  fontSize: 60.0,
+                  fontWeight: FontWeight.bold,
+                  color: HexColor('#D5D5D5')),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 100.0),
+            child: Text(
+              'M A K E',
+              style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 50),
+            width: MediaQuery.of(context).size.width - 40.0,
+            child: Text(
+              'Meaning:\nto produce; cause to exist or happen; bring about;',
+              textAlign: TextAlign.center,
+            ),
+          )
+        ],
       ),
     );
   }
 }
-
-//BottomNavigationBar(
-//currentIndex: 0,
-//onTap: (int index) {
-////          setState(() {
-////            selectedBottomItem = index;
-////          });
-//},
-//items: [
-//BottomNavigationBarItem(
-//backgroundColor:HexColor('${category.color}'),
-//icon: Icon(
-//Icons.arrow_back,
-//color: HexColor('#444444'),
-//),
-//title: Text('')),
-//BottomNavigationBarItem(
-//backgroundColor:HexColor('${category.color}'),
-//icon: Icon(
-//Icons.arrow_forward,
-//color: HexColor('#444444'),
-//),
-//title: Text('')),
-//BottomNavigationBarItem(
-//backgroundColor:HexColor('${category.color}'),
-//icon: Icon(
-//Icons.refresh,
-//color: HexColor('#444444'),
-//),
-//title: Text('')),
-//BottomNavigationBarItem(
-//backgroundColor:HexColor('${category.color}'),
-//icon: Icon(
-//Icons.check,
-//color: HexColor('#444444'),
-//),
-//title: Text(''))
-//],
-//),
