@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
 
     Future.delayed(
       Duration(seconds: 3),
-      () {
+          () {
         //goto home page
         Navigator.pushReplacement(
           context,
@@ -39,12 +39,23 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       backgroundColor: HexColor('8BFF74'),
       body: Center(
-        child: Text(
-          "Wordy!",
-          style: TextStyle(
-              fontSize: 40.0,
-              fontWeight: FontWeight.bold,
-              color: HexColor('444444')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Text(
+                "Wordy!",
+                style: TextStyle(
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold,
+                    color: HexColor('444444')),
+              ),
+            ),
+//            Align(
+//                child: Container(
+//              child: Text('developed by InvalidCo', style: TextStyle(fontSize: 10.0),),
+//            ))
+          ],
         ),
       ),
     );
