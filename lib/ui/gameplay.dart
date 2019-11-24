@@ -25,6 +25,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
+    var charList = getWordsLetterList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -96,20 +97,83 @@ class _GamePlayPageState extends State<GamePlayPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: 100.0),
             child: Text(
-              'M A K E',
+              'M _ _ _',
               style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 50),
+            margin: EdgeInsets.only(top: 50.0),
             width: MediaQuery.of(context).size.width - 40.0,
             child: Text(
               'Meaning:\nto produce; cause to exist or happen; bring about;',
               textAlign: TextAlign.center,
             ),
+          ),
+          Container(
+            height: 50.0,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 50.0),
+            child: new ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: charList.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    alignment: Alignment.center,
+                    height: 50.0,
+                    width: 50.0,
+                    margin: EdgeInsets.all(2.0),
+                    color: Colors.amberAccent,
+                    child: GestureDetector(
+                      onTap: () {
+                        debugPrint(charList[index]);
+                      },
+                      child: Text(charList[index]),
+                    ),
+                  );
+                }),
           )
         ],
       ),
+    );
+  }
+
+  List<String> getWordsLetterList() {
+    var charList = new List<String>();
+    charList.add("M");
+    charList.add("A");
+    charList.add("K");
+    charList.add("E");
+    return charList;
+  }
+
+  Widget getListWidget() {
+    var charList = getWordsLetterList();
+    return Container(
+      child: ListView.builder(
+          itemCount: charList.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Container(
+              height: 50.0,
+              width: 50.0,
+              color: Colors.amberAccent,
+              child: GestureDetector(
+                onTap: () {
+                  debugPrint(charList[index]);
+                },
+                child: Center(
+                  child: Text(
+                    charList[index],
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70),
+                  ),
+                ),
+              ),
+            );
+          }),
     );
   }
 }
