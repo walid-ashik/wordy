@@ -19,6 +19,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var userScore = 3;
   var totalScroe = 10;
   var prepositionList;
+  String guessedWord = '';
 
   _GamePlayPageState(Category category) {
     this.category = category;
@@ -29,7 +30,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
-    var charList = getWordsLetterList(prepositionList[0].word);
+    var charList = getWordsLetterList(prepositionList[1].word);
+    Word preposition = prepositionList[1];
+    String correctWord = preposition.word;
+    String fillInTheBlankHint =
+        preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -91,7 +96,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: 100.0),
             child: Text(
-              'M _ _ _',
+              '$guessedWord',
               style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
             ),
           ),
@@ -99,12 +104,12 @@ class _GamePlayPageState extends State<GamePlayPage> {
             margin: EdgeInsets.only(top: 50.0),
             width: MediaQuery.of(context).size.width - 40.0,
             child: Text(
-              'Meaning:\nto produce; cause to exist or happen; bring about;',
+              'Fill in the gap:\n $fillInTheBlankHint;',
               textAlign: TextAlign.center,
             ),
           ),
           Container(
-            height: 50.0,
+            height: 55.0,
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: 50.0),
             child: new ListView.builder(
@@ -114,15 +119,20 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 itemBuilder: (context, index) {
                   return Container(
                     alignment: Alignment.center,
-                    height: 50.0,
-                    width: 50.0,
+                    width: 55.0,
                     margin: EdgeInsets.all(2.0),
-                    color: Colors.amberAccent,
+                    color: HexColor('#EEEEEE'),
                     child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
+                        guessedWord = '$guessedWord${charList[index]}';
                         debugPrint(charList[index]);
                       },
-                      child: Text(charList[index]),
+                      child: Text(
+                        charList[index],
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   );
                 }),
@@ -138,39 +148,38 @@ class _GamePlayPageState extends State<GamePlayPage> {
     for (int i = 0; i < word.length; i++) {
       charList.add(word[i].toUpperCase());
     }
-
     charList.shuffle();
 
     return charList;
   }
 
-  Widget getListWidget() {
-    var charList = getWordsLetterList(prepositionList[0].word);
-    return Container(
-      child: ListView.builder(
-          itemCount: charList.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 50.0,
-              width: 50.0,
-              color: Colors.amberAccent,
-              child: GestureDetector(
-                onTap: () {
-                  debugPrint(charList[index]);
-                },
-                child: Center(
-                  child: Text(
-                    charList[index],
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70),
-                  ),
-                ),
-              ),
-            );
-          }),
-    );
-  }
+//  Widget getListWidget() {
+//    var charList = getWordsLetterList(prepositionList[0].word);
+//    return Container(
+//      child: ListView.builder(
+//          itemCount: charList.length,
+//          scrollDirection: Axis.horizontal,
+//          itemBuilder: (context, index) {
+//            return Container(
+//              height: 50.0,
+//              width: 50.0,
+//              color: Colors.amberAccent,
+//              child: GestureDetector(
+//                onTap: () {
+//                  debugPrint(charList[index]);
+//                },
+//                child: Center(
+//                  child: Text(
+//                    charList[index],
+//                    style: TextStyle(
+//                        fontSize: 14.0,
+//                        fontWeight: FontWeight.bold,
+//                        color: Colors.white70),
+//                  ),
+//                ),
+//              ),
+//            );
+//          }),
+//    );
+//  }
 }
