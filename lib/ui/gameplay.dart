@@ -49,16 +49,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
             ),
             Expanded(
               child: IconButton(
-                icon: Icon(Icons.arrow_forward, color: HexColor('#444444')),
-                onPressed: () {
-                  setState(() {
-                    homeText = 'forward clicked';
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: IconButton(
                 icon: Icon(Icons.refresh, color: HexColor('#444444')),
                 onPressed: () {
                   setState(() {
@@ -69,10 +59,10 @@ class _GamePlayPageState extends State<GamePlayPage> {
             ),
             Expanded(
               child: IconButton(
-                icon: Icon(Icons.check, color: HexColor('#444444')),
+                icon: Icon(Icons.arrow_forward, color: HexColor('#444444')),
                 onPressed: () {
                   setState(() {
-                    homeText = 'check clicked';
+                    homeText = 'forward clicked';
                   });
                 },
               ),
