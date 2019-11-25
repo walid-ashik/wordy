@@ -117,9 +117,14 @@ class Category {
   String color;
   bool isCompleted;
 
-  Category(String name, String color, bool isCompleted) {
-    this.name = name;
-    this.color = color;
-    this.isCompleted = isCompleted;
-  }
+  Category(this.name, this.color, this.isCompleted);
 }
+
+class Word {
+  String word;
+  String meaning;
+  String fillInTheGapSentence;
+
+  Word(this.word, this.meaning, this.fillInTheGapSentence);
+}
+

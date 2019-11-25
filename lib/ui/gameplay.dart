@@ -1,6 +1,8 @@
 import 'package:Wordy/ui/home.dart';
+import 'package:Wordy/util/data_util.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class GamePlayPage extends StatefulWidget {
   final Category category;
@@ -16,16 +18,18 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var homeText = "";
   var userScore = 3;
   var totalScroe = 10;
+  var prepositionList;
 
   _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
+    prepositionList = DataUtil.getPrepositionList();
   }
 
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
-    var charList = getWordsLetterList();
+    var charList = getWordsLetterList(prepositionList[0].word);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -128,17 +132,20 @@ class _GamePlayPageState extends State<GamePlayPage> {
     );
   }
 
-  List<String> getWordsLetterList() {
+  List<String> getWordsLetterList(String word) {
     var charList = new List<String>();
-    charList.add("A");
-    charList.add("K");
-    charList.add("M");
-    charList.add("E");
+
+    for (int i = 0; i < word.length; i++) {
+      charList.add(word[i].toUpperCase());
+    }
+
+    charList.shuffle();
+
     return charList;
   }
 
   Widget getListWidget() {
-    var charList = getWordsLetterList();
+    var charList = getWordsLetterList(prepositionList[0].word);
     return Container(
       child: ListView.builder(
           itemCount: charList.length,
@@ -167,4 +174,3 @@ class _GamePlayPageState extends State<GamePlayPage> {
     );
   }
 }
-
