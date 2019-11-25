@@ -130,9 +130,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
 
   List<String> getWordsLetterList() {
     var charList = new List<String>();
-    charList.add("M");
     charList.add("A");
     charList.add("K");
+    charList.add("M");
     charList.add("E");
     return charList;
   }
@@ -167,3 +167,4 @@ class _GamePlayPageState extends State<GamePlayPage> {
     );
   }
 }
+

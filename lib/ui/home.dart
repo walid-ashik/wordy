@@ -37,12 +37,12 @@ class HomePage extends StatelessWidget {
 
   List<Category> getCategories() {
     List<Category> categoires = new List();
-    categoires.add(new Category("Preposition", "#FBCA93"));
-    categoires.add(new Category("Business", "#A4FB93"));
-    categoires.add(new Category("Emotional", "#7AFBF2"));
-    categoires.add(new Category("Positive", "#7AA9FB"));
-    categoires.add(new Category("Sales", "#D487F9"));
-    categoires.add(new Category("Negative", "#F98787"));
+    categoires.add(new Category("Preposition", "#FBCA93", true));
+    categoires.add(new Category("Business", "#A4FB93", false));
+    categoires.add(new Category("Emotional", "#7AFBF2", false));
+    categoires.add(new Category("Positive", "#7AA9FB", false));
+    categoires.add(new Category("Sales", "#D487F9", false));
+    categoires.add(new Category("Negative", "#F98787", false));
     return categoires;
   }
 
@@ -88,8 +88,10 @@ class HomePage extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Spacer(),
-                              Icon(Icons.lock,
-                                  color: HexColor('#444444'), size: 16.0),
+                              categories[index].isCompleted
+                                  ? Text('')
+                                  : Icon(Icons.lock,
+                                      color: HexColor('#444444'), size: 16.0),
                               Text('   ')
                             ],
                           ),
@@ -100,23 +102,24 @@ class HomePage extends StatelessWidget {
   }
 
   void gotoGamePlay(BuildContext context, Category category) {
-     //goto home page
+    //goto home page
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => GamePlayPage(category),
       ),
     );
-
   }
 }
 
 class Category {
   String name;
   String color;
+  bool isCompleted;
 
-  Category(String name, String color) {
+  Category(String name, String color, bool isCompleted) {
     this.name = name;
     this.color = color;
+    this.isCompleted = isCompleted;
   }
 }
