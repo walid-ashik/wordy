@@ -20,17 +20,17 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var totalScroe = 10;
   var prepositionList;
   String guessedWord = '';
-
+  List<String> charList;
   _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
     prepositionList = DataUtil.getPrepositionList();
+    charList = getWordsLetterList(prepositionList[1].word);
   }
 
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
-    var charList = getWordsLetterList(prepositionList[1].word);
     Word preposition = prepositionList[1];
     String correctWord = preposition.word;
     String fillInTheBlankHint =
@@ -117,23 +117,29 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 itemCount: charList.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    width: 55.0,
-                    margin: EdgeInsets.all(2.0),
-                    color: HexColor('#EEEEEE'),
+                  return GestureDetector(
+
                     child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        guessedWord = '$guessedWord${charList[index]}';
-                        debugPrint(charList[index]);
-                      },
-                      child: Text(
-                        charList[index],
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          var tappedLetter = '$guessedWord${charList[index]}';
+                          setState(() {
+                            guessedWord = tappedLetter;
+                          });
+                          debugPrint('clicked');
+//                        debugPrint(charList[index]);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 55.0,
+                          margin: EdgeInsets.all(2.0),
+                          color: HexColor('#EEEEEE'),
+                          child: Text(
+                            charList[index],
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold),
+                          ),
+                        )),
                   );
                 }),
           )
