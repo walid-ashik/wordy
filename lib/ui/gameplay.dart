@@ -25,7 +25,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
     this.category = category;
     homeText = category.name;
     prepositionList = DataUtil.getPrepositionList();
-    charList = getWordsLetterList(prepositionList[1].word);
+    generatesWordLetterList(1);
+  }
+
+  void generatesWordLetterList(int index){
+    charList = getWordsLetterList(prepositionList[index].word);
   }
 
   @override
