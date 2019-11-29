@@ -21,24 +21,29 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var prepositionList;
   String guessedWord = '';
   List<String> charList;
+  var index = 0;
+  Word preposition = new Word.emtpy();
+  var isGeneratedNewList = true;
+  String correctWord = '';
+  String fillInTheBlankHint = '';
+
   _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
     prepositionList = DataUtil.getPrepositionList();
-    generatesWordLetterList(1);
-  }
-
-  void generatesWordLetterList(int index){
-    charList = getWordsLetterList(prepositionList[index].word);
+    preposition = prepositionList[index];
   }
 
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
-    Word preposition = prepositionList[1];
-    String correctWord = preposition.word;
-    String fillInTheBlankHint =
-        preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+    if (isGeneratedNewList) {
+      charList = getWordsLetterList(prepositionList[index].word);
+      correctWord = preposition.word;
+      fillInTheBlankHint =
+          preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+      isGeneratedNewList = false;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -55,7 +60,12 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    homeText = 'back clicked';
+                    gotoPreviousWord();
+                    setState() {
+                      isGeneratedNewList = true;
+                    }
+
+                    debugPrint('previous clicked!');
                   });
                 },
               ),
@@ -76,6 +86,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 onPressed: () {
                   setState(() {
                     homeText = 'forward clicked';
+                    debugPrint(homeText);
+                    gotoNextWord();
+                    setState() {
+                      isGeneratedNewList = true;
+                    }
                   });
                 },
               ),
@@ -122,7 +137,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-
                     child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
@@ -152,6 +166,26 @@ class _GamePlayPageState extends State<GamePlayPage> {
     );
   }
 
+  void gotoNextWord() {
+    guessedWord = '';
+    index = index + 1;
+    preposition = prepositionList[index];
+    correctWord = preposition.word;
+    fillInTheBlankHint =
+        preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+    charList = getWordsLetterList(prepositionList[index].word);
+  }
+
+  void gotoPreviousWord() {
+    guessedWord = '';
+    index = index - 1;
+    preposition = prepositionList[index];
+    correctWord = preposition.word;
+    fillInTheBlankHint =
+        preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+    charList = getWordsLetterList(prepositionList[index].word);
+  }
+
   List<String> getWordsLetterList(String word) {
     var charList = new List<String>();
 
@@ -162,34 +196,4 @@ class _GamePlayPageState extends State<GamePlayPage> {
 
     return charList;
   }
-
-//  Widget getListWidget() {
-//    var charList = getWordsLetterList(prepositionList[0].word);
-//    return Container(
-//      child: ListView.builder(
-//          itemCount: charList.length,
-//          scrollDirection: Axis.horizontal,
-//          itemBuilder: (context, index) {
-//            return Container(
-//              height: 50.0,
-//              width: 50.0,
-//              color: Colors.amberAccent,
-//              child: GestureDetector(
-//                onTap: () {
-//                  debugPrint(charList[index]);
-//                },
-//                child: Center(
-//                  child: Text(
-//                    charList[index],
-//                    style: TextStyle(
-//                        fontSize: 14.0,
-//                        fontWeight: FontWeight.bold,
-//                        color: Colors.white70),
-//                  ),
-//                ),
-//              ),
-//            );
-//          }),
-//    );
-//  }
 }

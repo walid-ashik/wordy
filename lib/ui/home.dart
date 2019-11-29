@@ -125,6 +125,13 @@ class Word {
   String meaning;
   String fillInTheGapSentence;
 
-  Word(this.word, this.meaning, this.fillInTheGapSentence);
+//  Word(this.word, this.meaning, this.fillInTheGapSentence);
+  Word.emtpy();
+
+  Word(String word, String meaning, String fillInTheGapSentence){
+    this.word = word;
+    this.meaning = meaning;
+    this.fillInTheGapSentence = fillInTheGapSentence;
+  }
 }
 

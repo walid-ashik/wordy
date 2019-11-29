@@ -4,11 +4,7 @@ class DataUtil {
   static List<Word> getPrepositionList() {
     var prepositionList = new List<Word>();
 
-    prepositionList.add(new Word(
-        'above',
-        'in extended space over and not touching',
-        'a display of fireworks above the town'));
-
+    prepositionList.add(new Word('above', 'in extended space over and not touching', 'a display of fireworks above the town'));
     prepositionList.add(new Word('about', 'on the subject of; concerning', 'I was thinking about you'));
     prepositionList.add(new Word('after', 'in the time following (an event or another period of time)', 'shortly after their marriage they moved to Colorado'));
     prepositionList.add(new Word('below', 'at a lower level or layer than', 'just below the pocket was a stain'));
