@@ -213,14 +213,37 @@ class _GamePlayPageState extends State<GamePlayPage> {
     debugPrint('$guessedWord != $correctWord');
     if (guessedWord.toLowerCase() == correctWord.toLowerCase()) {
       debugPrint("Answer is correct");
-      Future.delayed(Duration(milliseconds: 100), () {
-        setState(() {
-          Dialogs.showCorrectAnswerDialog(
-              context, '$guessedWord is a right guess!', 'Meaning: $meaning;');
-        });
-      });
+      showCorrectAnswerDialog(meaning);
     } else {
       debugPrint("Wrong answer");
+      //only show this dialog when user typed all possible letters
+      if (correctWord.length == guessedWord.length) {
+        showWrongAnswerDialog(guessedWord);
+      }
     }
+  }
+
+  void showCorrectAnswerDialog(String meaning) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        Dialogs.showCorrectAnswerDialog(
+            context, '$guessedWord is a right guess!', 'Meaning: $meaning;');
+        userScore++;
+        gotoNextWord();
+      });
+    });
+  }
+
+  void showWrongAnswerDialog(String word) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        Dialogs.showCorrectAnswerDialog(
+            context, '$word is wrong guess!', 'Meaning: $meaning;');
+        fillInTheBlankHint = preposition.fillInTheGapSentence
+            .replaceAll(correctWord, '________');
+        charList = getWordsLetterList(prepositionList[index].word);
+        guessedWord = '';
+      });
+    });
   }
 }
