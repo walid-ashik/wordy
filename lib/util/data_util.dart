@@ -14,6 +14,7 @@ class DataUtil {
     prepositionList.add(new Word('for', 'with the object or purpose of', 'to work for wages'));
     prepositionList.add(new Word('out', 'moving or appearing to move away from a particular place, especially one that is enclosed or hidden', 'he walked out into the street'));
     prepositionList.add(new Word('over', 'extending directly upwards from', 'I saw flames over Berlin'));
+    prepositionList.add(new Word('over', 'extending directly upwards from', 'I saw flames over Berlin'));
 
     return prepositionList;
   }

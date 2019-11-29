@@ -1,5 +1,6 @@
 import 'package:Wordy/ui/home.dart';
 import 'package:Wordy/util/data_util.dart';
+import 'package:Wordy/util/dialogs.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -16,8 +17,8 @@ class GamePlayPage extends StatefulWidget {
 class _GamePlayPageState extends State<GamePlayPage> {
   Category category;
   var homeText = "";
-  var userScore = 3;
-  var totalScroe = 10;
+  var userScore = 0;
+  var totalScroe = 0;
   var prepositionList;
   String guessedWord = '';
   List<String> charList;
@@ -26,12 +27,14 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var isGeneratedNewList = true;
   String correctWord = '';
   String fillInTheBlankHint = '';
+  String meaning = '';
 
   _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
     prepositionList = DataUtil.getPrepositionList();
     preposition = prepositionList[index];
+    totalScroe = DataUtil.getPrepositionList().length;
   }
 
   @override
@@ -40,6 +43,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
     if (isGeneratedNewList) {
       charList = getWordsLetterList(prepositionList[index].word);
       correctWord = preposition.word;
+      meaning = preposition.meaning;
       fillInTheBlankHint =
           preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
       isGeneratedNewList = false;
@@ -61,6 +65,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 onPressed: () {
                   setState(() {
                     gotoPreviousWord();
+                    userScore--;
                     setState() {
                       isGeneratedNewList = true;
                     }
@@ -72,10 +77,15 @@ class _GamePlayPageState extends State<GamePlayPage> {
             ),
             Expanded(
               child: IconButton(
-                icon: Icon(Icons.refresh, color: HexColor('#444444')),
+                icon: Icon(Icons.autorenew, color: HexColor('#444444')),
                 onPressed: () {
                   setState(() {
                     homeText = 'reload clicked';
+                    guessedWord = '';
+                    charList = getWordsLetterList(prepositionList[index].word);
+                    setState() {
+                      isGeneratedNewList = true;
+                    }
                   });
                 },
               ),
@@ -88,6 +98,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     homeText = 'forward clicked';
                     debugPrint(homeText);
                     gotoNextWord();
+                    userScore++;
                     setState() {
                       isGeneratedNewList = true;
                     }
@@ -145,6 +156,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                             guessedWord = tappedLetter;
                           });
                           debugPrint('clicked');
+                          checkAnswer(meaning);
 //                        debugPrint(charList[index]);
                         },
                         child: Container(
@@ -195,5 +207,20 @@ class _GamePlayPageState extends State<GamePlayPage> {
     charList.shuffle();
 
     return charList;
+  }
+
+  void checkAnswer(String meaning) {
+    debugPrint('$guessedWord != $correctWord');
+    if (guessedWord.toLowerCase() == correctWord.toLowerCase()) {
+      debugPrint("Answer is correct");
+      Future.delayed(Duration(milliseconds: 100), () {
+        setState(() {
+          Dialogs.showCorrectAnswerDialog(
+              context, '$guessedWord is a right guess!', 'Meaning: $meaning;');
+        });
+      });
+    } else {
+      debugPrint("Wrong answer");
+    }
   }
 }
