@@ -28,6 +28,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   String correctWord = '';
   String fillInTheBlankHint = '';
   String meaning = '';
+  String placeholder_guessed_word = '';
 
   _GamePlayPageState(Category category) {
     this.category = category;
@@ -127,7 +128,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             margin: EdgeInsets.only(top: 100.0),
             child: guessedWord == ''
                 ? Text(
-                    '_ _ _ _ ',
+                    '$placeholder_guessed_word',
                     style:
                         TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
                   )
@@ -208,8 +209,13 @@ class _GamePlayPageState extends State<GamePlayPage> {
   List<String> getWordsLetterList(String word) {
     var charList = new List<String>();
 
+    //make empty placeholder first otherwise it's keep adding every time new '_'
+    placeholder_guessed_word = '';
+
     for (int i = 0; i < word.length; i++) {
       charList.add(word[i].toUpperCase());
+      //set each letter for each dash as placholder
+      placeholder_guessed_word += '_ ';
     }
     charList.shuffle();
 
