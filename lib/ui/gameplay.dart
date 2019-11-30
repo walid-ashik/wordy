@@ -43,11 +43,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
     if (isGeneratedNewList) {
       charList = getWordsLetterList(prepositionList[index].word);
       correctWord = preposition.word;
-      meaning = preposition.meaning;
       fillInTheBlankHint =
           preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
       isGeneratedNewList = false;
     }
+    meaning = preposition.meaning;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -238,6 +238,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
+
             context, '$word is wrong guess!', 'Meaning: $meaning;');
         fillInTheBlankHint = preposition.fillInTheGapSentence
             .replaceAll(correctWord, '________');
