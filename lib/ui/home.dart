@@ -1,4 +1,5 @@
 import 'package:Wordy/ui/gameplay.dart';
+import 'package:Wordy/util/data_util.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordy/util/utils.dart';
 
@@ -37,14 +38,14 @@ class HomePage extends StatelessWidget {
 
   List<Category> getCategories() {
     List<Category> categoires = new List();
-    categoires.add(new Category("Preposition", "#FBCA93", true));
-    categoires.add(new Category("Positive", "#A4FB93", false));
-    categoires.add(new Category("Negative", "#7AFBF2", false));
-    categoires.add(new Category("Emotional", "#7AA9FB", false));
-    categoires.add(new Category("Inspirational", "#D487F9", false));
-    categoires.add(new Category("Sales", "##F98787", false));
-    categoires.add(new Category("Business", "#FBCA93", false));
-    categoires.add(new Category("Compliements", "#A4FB93", false));
+    categoires.add(new Category(Categories.preposition, "#FBCA93", true));
+    categoires.add(new Category(Categories.positive, "#A4FB93", false));
+    categoires.add(new Category(Categories.negative, "#7AFBF2", false));
+    categoires.add(new Category(Categories.emotional, "#7AA9FB", false));
+    categoires.add(new Category(Categories.inspirational, "#D487F9", false));
+    categoires.add(new Category(Categories.sales, "##F98787", false));
+    categoires.add(new Category(Categories.business, "#FBCA93", false));
+    categoires.add(new Category(Categories.compliments, "#A4FB93", false));
     return categoires;
   }
 

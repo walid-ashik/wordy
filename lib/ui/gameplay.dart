@@ -19,7 +19,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   var homeText = "";
   var userScore = 1;
   var totalScroe = 0;
-  var prepositionList;
+  var wordList;
   String guessedWord = '';
   List<String> charList;
   var index = 0;
@@ -33,16 +33,27 @@ class _GamePlayPageState extends State<GamePlayPage> {
   _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
-    prepositionList = DataUtil.getPrepositionList();
-    preposition = prepositionList[index];
-    totalScroe = DataUtil.getPrepositionList().length;
+    setCategoryList(category.name);
+    preposition = wordList[index];
+    totalScroe = wordList.length;
+  }
+
+  void setCategoryList(String categoryName) {
+    if (categoryName.toLowerCase() == Categories.preposition.toLowerCase()) {
+      wordList = DataUtil.getPrepositionList();
+    } else if (categoryName.toLowerCase() ==
+        Categories.positive.toLowerCase()) {
+      wordList = DataUtil.getPositiveWords();
+    } else {
+      wordList = DataUtil.getPrepositionList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     int selectedBottomItem = 0;
     if (isGeneratedNewList) {
-      charList = getWordsLetterList(prepositionList[index].word);
+      charList = getWordsLetterList(wordList[index].word);
       correctWord = preposition.word;
       fillInTheBlankHint =
           preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
@@ -80,7 +91,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 onPressed: () {
                   setState(() {
                     guessedWord = '';
-                    charList = getWordsLetterList(prepositionList[index].word);
+                    charList = getWordsLetterList(wordList[index].word);
                     setState() {
                       isGeneratedNewList = true;
                     }
@@ -188,21 +199,21 @@ class _GamePlayPageState extends State<GamePlayPage> {
   void gotoNextWord() {
     guessedWord = '';
     index = index + 1;
-    preposition = prepositionList[index];
+    preposition = wordList[index];
     correctWord = preposition.word;
     fillInTheBlankHint =
         preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
-    charList = getWordsLetterList(prepositionList[index].word);
+    charList = getWordsLetterList(wordList[index].word);
   }
 
   void gotoPreviousWord() {
     guessedWord = '';
     index = index - 1;
-    preposition = prepositionList[index];
+    preposition = wordList[index];
     correctWord = preposition.word;
     fillInTheBlankHint =
         preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
-    charList = getWordsLetterList(prepositionList[index].word);
+    charList = getWordsLetterList(wordList[index].word);
   }
 
   List<String> getWordsLetterList(String word) {
@@ -253,7 +264,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             context, '$word is wrong guess!', 'Meaning: $meaning;');
         fillInTheBlankHint = preposition.fillInTheGapSentence
             .replaceAll(correctWord, '________');
-        charList = getWordsLetterList(prepositionList[index].word);
+        charList = getWordsLetterList(wordList[index].word);
         guessedWord = '';
       });
     });
