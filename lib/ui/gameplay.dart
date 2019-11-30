@@ -59,7 +59,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             Expanded(
               child: IconButton(
                 icon: Icon(
-                  Icons.arrow_back,
+                  Icons.arrow_back_ios,
                   color: HexColor('#444444'),
                 ),
                 onPressed: () {
@@ -92,7 +92,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             ),
             Expanded(
               child: IconButton(
-                icon: Icon(Icons.arrow_forward, color: HexColor('#444444')),
+                icon: Icon(Icons.arrow_forward_ios, color: HexColor('#444444')),
                 onPressed: () {
                   setState(() {
                     homeText = 'forward clicked';
@@ -163,7 +163,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                           alignment: Alignment.center,
                           width: 55.0,
                           margin: EdgeInsets.all(2.0),
-                          color: HexColor('#EEEEEE'),
+                          color: HexColor('${category.color}'),
                           child: Text(
                             charList[index],
                             style: TextStyle(
