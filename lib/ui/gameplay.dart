@@ -17,7 +17,7 @@ class GamePlayPage extends StatefulWidget {
 class _GamePlayPageState extends State<GamePlayPage> {
   Category category;
   var homeText = "";
-  var userScore = 0;
+  var userScore = 1;
   var totalScroe = 0;
   var prepositionList;
   String guessedWord = '';
@@ -70,8 +70,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     setState() {
                       isGeneratedNewList = true;
                     }
-
-                    debugPrint('previous clicked!');
                   });
                 },
               ),
@@ -81,7 +79,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                 icon: Icon(Icons.autorenew, color: HexColor('#444444')),
                 onPressed: () {
                   setState(() {
-                    homeText = 'reload clicked';
                     guessedWord = '';
                     charList = getWordsLetterList(prepositionList[index].word);
                     setState() {
@@ -128,9 +125,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
             margin: EdgeInsets.only(top: 100.0),
             child: guessedWord == ''
                 ? Text(
-                    '$placeholder_guessed_word',
-                    style:
-                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
+                    '$placeholder_guessed_word ',
+                    style: TextStyle(
+                        color: HexColor('#D5D5D5'),
+                        fontSize: 50.0,
+                        fontWeight: FontWeight.w500),
                   )
                 : Text(
                     '$guessedWord',
@@ -215,7 +214,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
     for (int i = 0; i < word.length; i++) {
       charList.add(word[i].toUpperCase());
       //set each letter for each dash as placholder
-      placeholder_guessed_word += '_ ';
+      placeholder_guessed_word += ' _';
     }
     charList.shuffle();
 
