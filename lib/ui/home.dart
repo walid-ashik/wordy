@@ -38,13 +38,26 @@ class HomePage extends StatelessWidget {
   List<Category> getCategories() {
     List<Category> categoires = new List();
     categoires.add(new Category("Preposition", "#FBCA93", true));
-    categoires.add(new Category("Business", "#A4FB93", false));
-    categoires.add(new Category("Emotional", "#7AFBF2", false));
-    categoires.add(new Category("Positive", "#7AA9FB", false));
-    categoires.add(new Category("Sales", "#D487F9", false));
-    categoires.add(new Category("Negative", "#F98787", false));
+    categoires.add(new Category("Positive", "#A4FB93", false));
+    categoires.add(new Category("Negative", "#7AFBF2", false));
+    categoires.add(new Category("Emotional", "#7AA9FB", false));
+    categoires.add(new Category("Inspirational", "#D487F9", false));
+    categoires.add(new Category("Sales", "##F98787", false));
+    categoires.add(new Category("Business", "#FBCA93", false));
+    categoires.add(new Category("Compliements", "#A4FB93", false));
     return categoires;
   }
+
+//  List<Category> getCategories() {
+//    List<Category> categoires = new List();
+//    categoires.add(new Category("Level 1", "#FBCA93", true));
+//    categoires.add(new Category("Level 2", "#A4FB93", false));
+//    categoires.add(new Category("Level 3", "#7AFBF2", false));
+//    categoires.add(new Category("Level 4", "#7AA9FB", false));
+//    categoires.add(new Category("Level 5", "#D487F9", false));
+//    categoires.add(new Category("Level 6", "#F98787", false));
+//    return categoires;
+//  }
 
   Widget getCategoryListView() {
     var categories = getCategories();
@@ -121,6 +134,7 @@ class Category {
 }
 
 class Word {
+  int id;
   String word;
   String meaning;
   String fillInTheGapSentence;
@@ -128,7 +142,8 @@ class Word {
 //  Word(this.word, this.meaning, this.fillInTheGapSentence);
   Word.emtpy();
 
-  Word(String word, String meaning, String fillInTheGapSentence){
+  Word(int id, String word, String meaning, String fillInTheGapSentence){
+    this.id = id;
     this.word = word;
     this.meaning = meaning;
     this.fillInTheGapSentence = fillInTheGapSentence;
