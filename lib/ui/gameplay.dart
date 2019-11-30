@@ -125,10 +125,17 @@ class _GamePlayPageState extends State<GamePlayPage> {
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: 100.0),
-            child: Text(
-              '$guessedWord',
-              style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
-            ),
+            child: guessedWord == ''
+                ? Text(
+                    '_ _ _ _ ',
+                    style:
+                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
+                  )
+                : Text(
+                    '$guessedWord',
+                    style:
+                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
+                  ),
           ),
           Container(
             margin: EdgeInsets.only(top: 50.0),
@@ -238,7 +245,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
-
             context, '$word is wrong guess!', 'Meaning: $meaning;');
         fillInTheBlankHint = preposition.fillInTheGapSentence
             .replaceAll(correctWord, '________');
