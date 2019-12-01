@@ -250,7 +250,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
-            context, '$guessedWord is a right guess!', '$meaning;', '$guessedWord: ');
+            context, '$guessedWord is a right guess!', '$meaning;', '$guessedWord: ', true);
         userScore++;
         gotoNextWord();
       });
@@ -261,7 +261,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
-            context, '$word is wrong guess!', '$meaning', 'Meaning:');
+            context, '$word is wrong guess!', '$meaning', 'Meaning:', false);
         fillInTheBlankHint = preposition.fillInTheGapSentence
             .replaceAll(correctWord, '________');
         charList = getWordsLetterList(wordList[index].word);
