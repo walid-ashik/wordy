@@ -1,7 +1,10 @@
+import 'package:Wordy/util/data_util.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordy/ui/home.dart';
 import 'package:Wordy/util/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'dart:convert';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),
@@ -20,9 +23,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     //this is like onCreate() method in Android
 
+    setPreferences();
+
     Future.delayed(
       Duration(seconds: 3),
-          () {
+      () {
         //goto home page
         Navigator.pushReplacement(
           context,
@@ -59,5 +64,37 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void setPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setAllListStringInSharedPreference();
+
+    //just setup all the prefs data one time only after installing the app
+    if (!prefs.containsKey('first_time')) {
+      debugPrint('first_time: true');
+      await prefs.setBool('first_time', false);
+      setAllListStringInSharedPreference();
+    } else {
+      debugPrint('first_time: false');
+    }
+  }
+
+  void setAllListStringInSharedPreference() async {
+    List<Word> prepositionList = DataUtil.getPrepositionList();
+    var prepositionListJson =
+        jsonEncode(prepositionList.map((e) => e.toJson()).toList());
+    String prepositionListString = prepositionListJson.toString();
+
+    List<Word> positiveList = DataUtil.getPositiveWords();
+    var positiveListJson =
+        jsonEncode(positiveList.map((e) => e.toJson()).toList());
+    String positiveListJsonString = positiveListJson.toString();
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('preposition', prepositionListString);
+    await prefs.setString('positive', positiveListJsonString);
+
   }
 }

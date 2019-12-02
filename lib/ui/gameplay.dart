@@ -3,6 +3,7 @@ import 'package:Wordy/util/data_util.dart';
 import 'package:Wordy/util/dialogs.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import 'dart:convert';
 
@@ -30,6 +31,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   String fillInTheBlankHint = '';
   String meaning = '';
   String placeholder_guessed_word = '';
+  List<Word> list = [];
 
   _GamePlayPageState(Category category) {
     this.category = category;
@@ -38,7 +40,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
     preposition = wordList[index];
     totalScroe = wordList.length;
 
-    testJson();
+    fetchListAsString(category.name);
+
   }
 
   void testJson() {
@@ -63,6 +66,35 @@ class _GamePlayPageState extends State<GamePlayPage> {
 //      debugPrint('${word['meaning']}');
 //      debugPrint('${word['fillInTheGapSentence']}');
 //    }
+  }
+
+  fetchListAsString(String categoryName) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.containsKey('preposition')) {
+      debugPrint('Contains key');
+
+      var data = prefs.get('preposition') as String;
+      var myData = json.decode(data);
+
+      for (var word in myData) {
+
+        var stringId = '${word['id']}';
+        int id = int.parse(stringId);
+        list.add(new Word(id, '${word['word']}', '${word['meaning']}',
+            '${word['fillInTheGapSentence']}'));
+//       debugPrint('${word['id']}');
+//      debugPrint('${word['word']}');
+//      debugPrint('${word['meaning']}');
+//      debugPrint('${word['fillInTheGapSentence']}');
+      }
+    } else {
+      debugPrint('Not contains key');
+    }
+
+    for (var l in list) {
+      debugPrint(l.word);
+    }
   }
 
   void setCategoryList(String categoryName) {
