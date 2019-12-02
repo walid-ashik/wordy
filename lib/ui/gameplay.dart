@@ -4,6 +4,7 @@ import 'package:Wordy/util/dialogs.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:convert';
 
 class GamePlayPage extends StatefulWidget {
   final Category category;
@@ -23,7 +24,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
   String guessedWord = '';
   List<String> charList;
   var index = 0;
-  Word preposition = new Word.emtpy();
+  Word preposition = new Word.empty();
   var isGeneratedNewList = true;
   String correctWord = '';
   String fillInTheBlankHint = '';
@@ -36,6 +37,32 @@ class _GamePlayPageState extends State<GamePlayPage> {
     setCategoryList(category.name);
     preposition = wordList[index];
     totalScroe = wordList.length;
+
+    testJson();
+  }
+
+  void testJson() {
+    List<Word> l = DataUtil.getPrepositionList();
+    List jsonList = Word.encondeToJson(l);
+    var j = jsonEncode(l.map((e) => e.toJson()).toList());
+    String jsonString = j.toString();
+
+    debugPrint('$jsonString');
+
+    var myData = json.decode(jsonString);
+
+    debugPrint('$myData');
+
+//    String wordListInString = json.encode(l);
+//    List<Word> list = json.decode(myData);
+//
+//    for (var word in myData) {
+//      debugPrint('\n');
+//      debugPrint('${word['id']}');
+//      debugPrint('${word['word']}');
+//      debugPrint('${word['meaning']}');
+//      debugPrint('${word['fillInTheGapSentence']}');
+//    }
   }
 
   void setCategoryList(String categoryName) {
@@ -250,7 +277,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
-            context, '$guessedWord is a right guess!', '$meaning;', '$guessedWord: ', true);
+            context,
+            '$guessedWord is a right guess!',
+            '$meaning;',
+            '$guessedWord: ',
+            true);
         userScore++;
         gotoNextWord();
       });

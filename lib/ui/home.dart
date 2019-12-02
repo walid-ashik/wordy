@@ -141,13 +141,30 @@ class Word {
   String fillInTheGapSentence;
 
 //  Word(this.word, this.meaning, this.fillInTheGapSentence);
-  Word.emtpy();
+  Word.empty();
 
   Word(int id, String word, String meaning, String fillInTheGapSentence){
     this.id = id;
     this.word = word;
     this.meaning = meaning;
     this.fillInTheGapSentence = fillInTheGapSentence;
+  }
+
+  Map<String,dynamic> toJson(){
+    return {
+      "id": this.id,
+      "word": this.word,
+      "meaning": this.meaning,
+      "fillInTheGapSentence": this.fillInTheGapSentence
+    };
+  }
+
+  static List encondeToJson(List<Word>list){
+    List jsonList = List();
+    list.map((item)=>
+        jsonList.add(item.toJson())
+    ).toList();
+    return jsonList;
   }
 }
 
