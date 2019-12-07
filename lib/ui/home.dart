@@ -140,15 +140,17 @@ class Word {
   String meaning;
   String fillInTheGapSentence;
 
-//  Word(this.word, this.meaning, this.fillInTheGapSentence);
-  Word.empty();
-
-  Word(int id, String word, String meaning, String fillInTheGapSentence){
+  Word.Construct(int id, String word, String meaning, String fillInTheGapSentence){
     this.id = id;
     this.word = word;
     this.meaning = meaning;
     this.fillInTheGapSentence = fillInTheGapSentence;
   }
+
+//  Word(this.word, this.meaning, this.fillInTheGapSentence);
+  Word.empty();
+
+  Word({this.id, this.word, this.meaning, this.fillInTheGapSentence});
 
   Map<String,dynamic> toJson(){
     return {
@@ -158,6 +160,16 @@ class Word {
       "fillInTheGapSentence": this.fillInTheGapSentence
     };
   }
+
+  factory Word.fromJson(Map<String, dynamic> json){
+    return Word(
+      id: json['id'] as int,
+      word: json['word'] as String,
+      meaning: json['meaning'] as String,
+      fillInTheGapSentence: json['fillInTheGapSentence'] as String,
+    );
+  }
+
 
   static List encondeToJson(List<Word>list){
     List jsonList = List();

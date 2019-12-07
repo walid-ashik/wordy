@@ -1,6 +1,7 @@
 import 'package:Wordy/ui/home.dart';
 import 'package:Wordy/util/data_util.dart';
 import 'package:Wordy/util/dialogs.dart';
+import 'package:Wordy/util/shared_preferences.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,14 +17,14 @@ class GamePlayPage extends StatefulWidget {
   _GamePlayPageState createState() => _GamePlayPageState(category);
 }
 
-class _GamePlayPageState extends State<GamePlayPage> {
+class _GamePlayPageState extends State<GamePlayPage>{
   Category category;
   var homeText = "";
   var userScore = 1;
   var totalScroe = 0;
-  var wordList;
+  List<Word> wordList = [];
   String guessedWord = '';
-  List<String> charList;
+  List<String> charList = [];
   var index = 0;
   Word preposition = new Word.empty();
   var isGeneratedNewList = true;
@@ -32,33 +33,94 @@ class _GamePlayPageState extends State<GamePlayPage> {
   String meaning = '';
   String placeholder_guessed_word = '';
   List<Word> list = [];
+  var isLoaded = false;
 
-  _GamePlayPageState(Category category) {
+  _GamePlayPageState(Category category){
     this.category = category;
     homeText = category.name;
-    setCategoryList(category.name);
-    preposition = wordList[index];
-    totalScroe = wordList.length;
+//    setCategoryList(category.name);
+//
+//    preposition = wordList[index];
+//    totalScroe = wordList.length;
 
-    fetchListAsString(category.name);
-
+//    setList();
+//    testJson();
+//    fetchListAsString(category.name);
   }
 
-  void testJson() {
-    List<Word> l = DataUtil.getPrepositionList();
-    List jsonList = Word.encondeToJson(l);
-    var j = jsonEncode(l.map((e) => e.toJson()).toList());
-    String jsonString = j.toString();
+  @override
+  void initState() {
+    super.initState();
+    loadJson();
+  }
 
-    debugPrint('$jsonString');
+  Future loadJson() async {
+    print('fetching words....');
+//    WordyPreference.fetchListAsString(category.name.toLowerCase()).then((albums){
+//      print('length: ${albums.length}');
+//      print('first: ${albums[0].word}');
+//    });
+//
+    final prefs = await SharedPreferences.getInstance();
 
-    var myData = json.decode(jsonString);
+//    print(prefs.getString(category.name.toLowerCase()));
 
-    debugPrint('$myData');
+    WordyPreference.getString(category.name.toLowerCase()).then((string) {
+      print(string);
+
+      var myData = json.decode(string);
+      for (var word in myData) {
+//
+        var stringId = '${word['id']}';
+        int id = int.parse(stringId);
+        wordList.add(
+            new Word.Construct(id, '${word['word']}', '${word['meaning']}',
+                '${word['fillInTheGapSentence']}'));
+        debugPrint('${word['id']}');
+        debugPrint('${word['word']}');
+        debugPrint('${word['meaning']}');
+        debugPrint('${word['fillInTheGapSentence']}');
+      }
+
+      setState(() {
+        isLoaded = true;
+      });
+    });
+
+//    List<Word> words = await WordyPreference.fetchListAsString(category.name);
+//
+//    print('fetcing from preferences: length - ${words.length}');
+//
+//    for(int i=0; i<words.length; i++){
+//      print('\n');
+//      print(words[i].word);
+////      print(word.id.toString());
+//    }
+//    print('fetching done!');
+//
+//  }
+
+
+//  void setList() async {
+//    List<Word> l = await WordyPreference.fetchListAsString(category.name);
+//    list = l;
+//  }
+
+    void testJson() {
+      List<Word> l = DataUtil.getPrepositionList();
+      List jsonList = Word.encondeToJson(l);
+      var j = jsonEncode(l.map((e) => e.toJson()).toList());
+      String jsonString = j.toString();
+
+      debugPrint('$jsonString');
+
+      var myData = json.decode(jsonString);
+
+      debugPrint('$myData');
 
 //    String wordListInString = json.encode(l);
 //    List<Word> list = json.decode(myData);
-//
+////
 //    for (var word in myData) {
 //      debugPrint('\n');
 //      debugPrint('${word['id']}');
@@ -66,36 +128,37 @@ class _GamePlayPageState extends State<GamePlayPage> {
 //      debugPrint('${word['meaning']}');
 //      debugPrint('${word['fillInTheGapSentence']}');
 //    }
-  }
-
-  fetchListAsString(String categoryName) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (prefs.containsKey('preposition')) {
-      debugPrint('Contains key');
-
-      var data = prefs.get('preposition') as String;
-      var myData = json.decode(data);
-
-      for (var word in myData) {
-
-        var stringId = '${word['id']}';
-        int id = int.parse(stringId);
-        list.add(new Word(id, '${word['word']}', '${word['meaning']}',
-            '${word['fillInTheGapSentence']}'));
-//       debugPrint('${word['id']}');
-//      debugPrint('${word['word']}');
-//      debugPrint('${word['meaning']}');
-//      debugPrint('${word['fillInTheGapSentence']}');
-      }
-    } else {
-      debugPrint('Not contains key');
-    }
-
-    for (var l in list) {
-      debugPrint(l.word);
     }
   }
+//  fetchListAsString(String categoryName) async {
+//    final prefs = await SharedPreferences.getInstance();
+//
+//    if (prefs.containsKey('preposition')) {
+//      debugPrint('Contains key');
+//
+//      var data = prefs.get('preposition') as String;
+//      var myData = json.decode(data);
+//
+//      for (var word in myData) {
+//
+//        var stringId = '${word['id']}';
+//        int id = int.parse(stringId);
+//        wordList.add(new Word(id, '${word['word']}', '${word['meaning']}',
+//            '${word['fillInTheGapSentence']}'));
+////       debugPrint('${word['id']}');
+////      debugPrint('${word['word']}');
+////      debugPrint('${word['meaning']}');
+////      debugPrint('${word['fillInTheGapSentence']}');
+//      }
+//    } else {
+//      debugPrint('Not contains key');
+//    }
+//
+//
+//    for (var l in wordList) {
+//      debugPrint(l.word);
+//    }
+//  }
 
   void setCategoryList(String categoryName) {
     if (categoryName.toLowerCase() == Categories.preposition.toLowerCase()) {
@@ -107,20 +170,27 @@ class _GamePlayPageState extends State<GamePlayPage> {
       wordList = DataUtil.getPrepositionList();
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    int selectedBottomItem = 0;
-    if (isGeneratedNewList) {
-      charList = getWordsLetterList(wordList[index].word);
-      correctWord = preposition.word;
-      fillInTheBlankHint =
-          preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
-      isGeneratedNewList = false;
-    }
-    meaning = preposition.meaning;
 
-    return Scaffold(
+    int selectedBottomItem = 0;
+
+    if(isLoaded){
+
+      preposition = wordList[index];
+      totalScroe = wordList.length;
+
+      if (isGeneratedNewList) {
+        charList = getWordsLetterList(wordList[index].word);
+        correctWord = preposition.word;
+        fillInTheBlankHint =
+            preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+        isGeneratedNewList = false;
+      }
+      meaning = preposition.meaning;
+    }
+
+    return isLoaded ? Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
         color: HexColor('${category.color}'),
@@ -165,7 +235,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
                   setState(() {
                     homeText = 'forward clicked';
                     debugPrint(homeText);
+
                     gotoNextWord();
+
                     userScore++;
                     setState() {
                       isGeneratedNewList = true;
@@ -252,6 +324,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
           )
         ],
       ),
+    ) : Center(
+      child: CircularProgressIndicator(),
     );
   }
 
@@ -332,4 +406,5 @@ class _GamePlayPageState extends State<GamePlayPage> {
       });
     });
   }
+
 }
