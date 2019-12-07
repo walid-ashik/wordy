@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class GamePlayPage extends StatefulWidget {
   final Category category;
@@ -17,7 +18,7 @@ class GamePlayPage extends StatefulWidget {
   _GamePlayPageState createState() => _GamePlayPageState(category);
 }
 
-class _GamePlayPageState extends State<GamePlayPage>{
+class _GamePlayPageState extends State<GamePlayPage> {
   Category category;
   var homeText = "";
   var userScore = 1;
@@ -35,7 +36,9 @@ class _GamePlayPageState extends State<GamePlayPage>{
   List<Word> list = [];
   var isLoaded = false;
 
-  _GamePlayPageState(Category category){
+  SharedPreferences prefes;
+
+  _GamePlayPageState(Category category) {
     this.category = category;
     homeText = category.name;
 //    setCategoryList(category.name);
@@ -54,6 +57,18 @@ class _GamePlayPageState extends State<GamePlayPage>{
     loadJson();
   }
 
+  void showToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+  }
+
   Future loadJson() async {
     print('fetching words....');
 //    WordyPreference.fetchListAsString(category.name.toLowerCase()).then((albums){
@@ -61,7 +76,7 @@ class _GamePlayPageState extends State<GamePlayPage>{
 //      print('first: ${albums[0].word}');
 //    });
 //
-    final prefs = await SharedPreferences.getInstance();
+    prefes = await SharedPreferences.getInstance();
 
 //    print(prefs.getString(category.name.toLowerCase()));
 
@@ -130,6 +145,7 @@ class _GamePlayPageState extends State<GamePlayPage>{
 //    }
     }
   }
+
 //  fetchListAsString(String categoryName) async {
 //    final prefs = await SharedPreferences.getInstance();
 //
@@ -170,13 +186,12 @@ class _GamePlayPageState extends State<GamePlayPage>{
       wordList = DataUtil.getPrepositionList();
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     int selectedBottomItem = 0;
 
-    if(isLoaded){
-
+    if (isLoaded) {
       preposition = wordList[index];
       totalScroe = wordList.length;
 
@@ -184,7 +199,8 @@ class _GamePlayPageState extends State<GamePlayPage>{
         charList = getWordsLetterList(wordList[index].word);
         correctWord = preposition.word;
         fillInTheBlankHint =
-            preposition.fillInTheGapSentence.replaceAll(correctWord, '________');
+            preposition.fillInTheGapSentence.replaceAll(
+                correctWord, '________');
         isGeneratedNewList = false;
       }
       meaning = preposition.meaning;
@@ -236,11 +252,21 @@ class _GamePlayPageState extends State<GamePlayPage>{
                     homeText = 'forward clicked';
                     debugPrint(homeText);
 
-                    gotoNextWord();
+                    var nextWordId = wordList[index].id.toString();
 
-                    userScore++;
-                    setState() {
-                      isGeneratedNewList = true;
+                    print('next word id: ${wordList[index].id}');
+                    print('is next word saved: ${prefes.containsKey(
+                        nextWordId)}');
+                    if (prefes.containsKey(nextWordId)) {
+                      gotoNextWord();
+
+                      userScore++;
+                      setState() {
+                        isGeneratedNewList = true;
+                      }
+                    } else {
+                      showWrongAnswerDialog('can not go to next!');
+                      print('cant go to next');
                     }
                   });
                 },
@@ -267,21 +293,24 @@ class _GamePlayPageState extends State<GamePlayPage>{
             margin: EdgeInsets.only(top: 100.0),
             child: guessedWord == ''
                 ? Text(
-                    '$placeholder_guessed_word ',
-                    style: TextStyle(
-                        color: HexColor('#D5D5D5'),
-                        fontSize: 50.0,
-                        fontWeight: FontWeight.w500),
-                  )
+              '$placeholder_guessed_word ',
+              style: TextStyle(
+                  color: HexColor('#D5D5D5'),
+                  fontSize: 50.0,
+                  fontWeight: FontWeight.w500),
+            )
                 : Text(
-                    '$guessedWord',
-                    style:
-                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
-                  ),
+              '$guessedWord',
+              style:
+              TextStyle(fontSize: 50.0, fontWeight: FontWeight.w500),
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 50.0),
-            width: MediaQuery.of(context).size.width - 40.0,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width - 40.0,
             child: Text(
               'Fill in the gap:\n $fillInTheBlankHint;',
               textAlign: TextAlign.center,
@@ -369,6 +398,8 @@ class _GamePlayPageState extends State<GamePlayPage>{
     debugPrint('$guessedWord != $correctWord');
     if (guessedWord.toLowerCase() == correctWord.toLowerCase()) {
       debugPrint("Answer is correct");
+      print('correct ans word id: ${wordList[index].id.toString()}');
+      prefes.setString(wordList[index].id.toString(), '');
       showCorrectAnswerDialog(meaning);
     } else {
       debugPrint("Wrong answer");
