@@ -104,10 +104,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
       var myData = json.decode(jsonString);
 
       debugPrint('$myData');
-
     }
   }
-
 
   void setCategoryList(String categoryName) {
     if (categoryName.toLowerCase() == Categories.preposition.toLowerCase()) {
@@ -115,6 +113,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
     } else if (categoryName.toLowerCase() ==
         Categories.positive.toLowerCase()) {
       wordList = DataUtil.getPositiveWords();
+    } else if(categoryName.toLowerCase() == Categories.negative.toLowerCase()) {
+      wordList = DataUtil.getPrepositionList();
     } else {
       wordList = DataUtil.getPrepositionList();
     }
@@ -122,10 +122,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
 
   @override
   Widget build(BuildContext context) {
-
     if (isLoaded) {
-
-      if(isFirstLoading){
+      if (isFirstLoading) {
         isFirstLoading = false;
 
         var categoryName = category.name.toLowerCase();
@@ -170,7 +168,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                         setState(() {
                           //do not go -1 index of word list cause that's impossible.
                           //there is no word
-                          if (index != 0){
+                          if (index != 0) {
                             gotoPreviousWord();
                             setState() {
                               index--;
@@ -180,7 +178,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                             //show no previous word dialog
                             showWrongAnswerDialog('You can not go previous');
                           }
-
                         });
                       },
                     ),
@@ -213,7 +210,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                               index++;
                               isGeneratedNewList = true;
                             }
-
                           } else {
                             showWrongAnswerDialog('can not go to next!');
                           }
@@ -255,13 +251,44 @@ class _GamePlayPageState extends State<GamePlayPage> {
                         ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 50.0),
-                  width: MediaQuery.of(context).size.width - 40.0,
-                  child: Text(
-                    'Fill in the gap:\n $fillInTheBlankHint;',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                    margin: EdgeInsets.only(top: 50.0),
+                    width: MediaQuery.of(context).size.width - 40.0,
+                    child: //Text(
+                        //'Fill in the gap:\n $fillInTheBlankHint;',
+                        //textAlign: TextAlign.center,
+                        //),
+                        RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text: 'Fill in the gap: ',
+                          style: TextStyle(
+                              color: HexColor('#444444'),
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '$fillInTheBlankHint',
+                              style: TextStyle(
+                                  color: HexColor('#444444'),
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                            TextSpan(
+                                text: '\nMeaning: ',
+                                style: TextStyle(
+                                  color: HexColor('#444444'),
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            TextSpan(
+                              text: '$meaning;',
+                              style: TextStyle(
+                                  color: HexColor('#444444'),
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal),
+                            )
+                          ]),
+                    )),
                 Container(
                   height: 55.0,
                   alignment: Alignment.center,
@@ -275,8 +302,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                           child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                var tappedLetter =
-                                    '$guessedWord${charList[i]}';
+                                var tappedLetter = '$guessedWord${charList[i]}';
                                 setState(() {
                                   guessedWord = tappedLetter;
                                 });
@@ -302,8 +328,10 @@ class _GamePlayPageState extends State<GamePlayPage> {
               ],
             ),
           )
-        : Center(
-            child: CircularProgressIndicator(),
+        : Scaffold(
+            body: Center(
+              child: Text('No data found!'),
+            ),
           );
   }
 
@@ -392,22 +420,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //    List<Word> words = await WordyPreference.fetchListAsString(category.name);
 //
 //    print('fetcing from preferences: length - ${words.length}');
@@ -437,10 +449,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
 //      debugPrint('${word['fillInTheGapSentence']}');
 //    }
 
-
-
-
-
 //    setCategoryList(category.name);
 //
 //    preposition = wordList[index];
@@ -449,8 +457,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
 //    setList();
 //    testJson();
 //    fetchListAsString(category.name);
-
-
 
 //  fetchListAsString(String categoryName) async {
 //    final prefs = await SharedPreferences.getInstance();
