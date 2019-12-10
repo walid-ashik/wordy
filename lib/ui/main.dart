@@ -107,6 +107,13 @@ class _MyAppState extends State<MyApp> {
     jsonEncode(inspirationalList.map((e) => e.toJson()).toList());
     String inspirationalListJsonString = inspirationalListJson.toString();
 
+
+    List<Word> salesList = DataUtil.getSalesWords();
+    var salesListJson =
+    jsonEncode(salesList.map((e) => e.toJson()).toList());
+    String salesListJsonString = salesListJson.toString();
+
+
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('preposition', prepositionListString);
@@ -114,6 +121,7 @@ class _MyAppState extends State<MyApp> {
     await prefs.setString('negative', negativeListJsonString);
     await prefs.setString('emotional', emotionalListJsonString);
     await prefs.setString('inspirational', inspirationalListJsonString);
+    await prefs.setString('sales', salesListJsonString);
 
   }
 }

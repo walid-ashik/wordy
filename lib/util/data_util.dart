@@ -112,17 +112,17 @@ class DataUtil {
   static List<Word> getBusinessWords() {
     var positiveWords = new List<Word>();
 
-    positiveWords.add(new Word.Construct(7001, '', '', ''));
-    positiveWords.add(new Word.Construct(7002, '', '', ''));
-    positiveWords.add(new Word.Construct(7003, '', '', ''));
-    positiveWords.add(new Word.Construct(7004, '', '', ''));
-    positiveWords.add(new Word.Construct(7005, '', '', ''));
-    positiveWords.add(new Word.Construct(7006, '', '', ''));
-    positiveWords.add(new Word.Construct(7007, '', '', ''));
-    positiveWords.add(new Word.Construct(7008, '', '', ''));
-    positiveWords.add(new Word.Construct(7009, '', '', ''));
-    positiveWords.add(new Word.Construct(70010, '', '', ''));
-    positiveWords.add(new Word.Construct(70011, '', '', ''));
+    positiveWords.add(new Word.Construct(7001, 'job', 'a paid position of regular employment', 'the scheme could create 200 jobs'));
+    positiveWords.add(new Word.Construct(7002, 'term', 'a word or phrase used to describe a thing or to express a concept', 'the musical term ‘leitmotiv’'));
+    positiveWords.add(new Word.Construct(7003, 'load', 'a heavy or bulky thing ', 'he began to load the gun'));
+    positiveWords.add(new Word.Construct(7004, 'fee', 'an amount of money paid for a particular piece of work', 'an admission fee'));
+    positiveWords.add(new Word.Construct(7005, 'pay', 'to give money to someone for something you want to buy', 'How much did you pay for the tickets?'));
+    positiveWords.add(new Word.Construct(7006, 'plan', 'a set of decisions about how to do something in the future', 'a company\'s business plan'));
+    positiveWords.add(new Word.Construct(7007, 'skill', 'an ability to do an activity or job well', 'I have no skill at/in sewing.'));
+    positiveWords.add(new Word.Construct(7008, 'client', 'a customer or someone who receives services', 'I offer great services to my client'));
+    positiveWords.add(new Word.Construct(7009, 'salary', 'a fixed amount of money agreed every year as pay for an employee', 'an annual salary of £40,000'));
+    positiveWords.add(new Word.Construct(70010, 'staff', 'the group of people who work for an organization', 'Has the news been communicated to the staff yet?'));
+    positiveWords.add(new Word.Construct(70011, 'asset', 'a useful or valuable quality, skill, or person', 'He\'ll be a great asset to the team'));
 
     return positiveWords;
   }
