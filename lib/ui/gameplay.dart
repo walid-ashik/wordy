@@ -110,12 +110,21 @@ class _GamePlayPageState extends State<GamePlayPage> {
   void setCategoryList(String categoryName) {
     if (categoryName.toLowerCase() == Categories.preposition.toLowerCase()) {
       wordList = DataUtil.getPrepositionList();
-    } else if (categoryName.toLowerCase() ==
-        Categories.positive.toLowerCase()) {
+    } else if (categoryName.toLowerCase() == Categories.positive.toLowerCase()) {
       wordList = DataUtil.getPositiveWords();
     } else if(categoryName.toLowerCase() == Categories.negative.toLowerCase()) {
-      wordList = DataUtil.getPrepositionList();
-    } else {
+      wordList = DataUtil.getNegativeWords();
+    } else if(categoryName.toLowerCase() == Categories.emotional.toLowerCase()){
+      wordList = DataUtil.getEmotionalWords();
+    }else if(categoryName.toLowerCase() == Categories.inspirational.toLowerCase()){
+      wordList = DataUtil.getInspirationalWords();
+    }else if(categoryName.toLowerCase() == Categories.sales.toLowerCase()){
+      wordList = DataUtil.getSalesWords();
+    }else if(categoryName.toLowerCase() == Categories.business.toLowerCase()) {
+      wordList = DataUtil.getBusinessWords();
+    }else if(categoryName.toLowerCase() == Categories.compliments.toLowerCase()) {
+      wordList = DataUtil.getComplimentWords();
+    }else {
       wordList = DataUtil.getPrepositionList();
     }
   }

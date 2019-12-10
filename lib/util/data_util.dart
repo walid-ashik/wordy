@@ -130,17 +130,17 @@ class DataUtil {
   static List<Word> getComplimentWords() {
     var positiveWords = new List<Word>();
 
-    positiveWords.add(new Word.Construct(8001, '', '', ''));
-    positiveWords.add(new Word.Construct(8002, '', '', ''));
-    positiveWords.add(new Word.Construct(8003, '', '', ''));
-    positiveWords.add(new Word.Construct(8004, '', '', ''));
-    positiveWords.add(new Word.Construct(8005, '', '', ''));
-    positiveWords.add(new Word.Construct(8006, '', '', ''));
-    positiveWords.add(new Word.Construct(8007, '', '', ''));
-    positiveWords.add(new Word.Construct(8008, '', '', ''));
-    positiveWords.add(new Word.Construct(8009, '', '', ''));
-    positiveWords.add(new Word.Construct(80010, '', '', ''));
-    positiveWords.add(new Word.Construct(80011, '', '', ''));
+    positiveWords.add(new Word.Construct(8001, 'fair', 'treating people equally without favouritism or discrimination', 'try first by fair means'));
+    positiveWords.add(new Word.Construct(8002, 'brave', 'showing no fear of dangerous or difficult things', 'he has done a brave work'));
+    positiveWords.add(new Word.Construct(8003, 'kind', 'generous, helpful, and thinking about other people\'s feelings', 'It is very kind of you to help us'));
+    positiveWords.add(new Word.Construct(8004, 'honest', 'free of deceit; truthful and sincere', 'I haven\'t been totally honest with you'));
+    positiveWords.add(new Word.Construct(8005, 'smart', 'having a clean, tidy, and stylish appearance', 'I need a smart jacket for my interview'));
+    positiveWords.add(new Word.Construct(8006, 'sweet', 'pleasing in general; delightful', 'it was the sweet life he had always craved'));
+    positiveWords.add(new Word.Construct(8007, 'wise', 'having or showing the ability to make good judgments, based on a deep understanding and experience of life', 'I think you made a wise choice'));
+    positiveWords.add(new Word.Construct(8008, 'loyal', 'giving or showing firm and constant support or allegiance to a person or institution', 'She is very loyal to her friends'));
+    positiveWords.add(new Word.Construct(8009, 'witty', 'using words in a clever and funny way', 'He was witty and very charming'));
+    positiveWords.add(new Word.Construct(80010, 'clever', 'quick to understand, learn, and devise or apply ideas; intelligent', 'she was an extremely clever and studious young woman'));
+    positiveWords.add(new Word.Construct(80011, 'kind', 'generous, helpful, and thinking about other people\'s feelings', 'It is very kind of you to help us'));
 
     return positiveWords;
   }

@@ -107,12 +107,20 @@ class _MyAppState extends State<MyApp> {
     jsonEncode(inspirationalList.map((e) => e.toJson()).toList());
     String inspirationalListJsonString = inspirationalListJson.toString();
 
-
     List<Word> salesList = DataUtil.getSalesWords();
     var salesListJson =
     jsonEncode(salesList.map((e) => e.toJson()).toList());
     String salesListJsonString = salesListJson.toString();
 
+    List<Word> businessList = DataUtil.getBusinessWords();
+    var businessListJson =
+    jsonEncode(businessList.map((e) => e.toJson()).toList());
+    String businessListJsonString = businessListJson.toString();
+
+    List<Word> complimentList = DataUtil.getComplimentWords();
+    var complimentListJson =
+    jsonEncode(complimentList.map((e) => e.toJson()).toList());
+    String complimentListJsonString = complimentListJson.toString();
 
     final prefs = await SharedPreferences.getInstance();
 
@@ -122,6 +130,8 @@ class _MyAppState extends State<MyApp> {
     await prefs.setString('emotional', emotionalListJsonString);
     await prefs.setString('inspirational', inspirationalListJsonString);
     await prefs.setString('sales', salesListJsonString);
+    await prefs.setString('business', businessListJsonString);
+    await prefs.setString('sales', complimentListJsonString);
 
   }
 }
