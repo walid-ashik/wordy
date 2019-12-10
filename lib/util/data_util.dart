@@ -96,14 +96,14 @@ class DataUtil {
     positiveWords.add(new Word.Construct(6001, 'now', 'at the present time or moment', 'limited item, buy now !'));
     positiveWords.add(new Word.Construct(6002, 'free', 'given or available without charge', 'Buy 1 Get 1 for free'));
     positiveWords.add(new Word.Construct(6003, 'new', 'now for the first time; not existing before', 'looking for new business'));
-    positiveWords.add(new Word.Construct(6004, 'truth', 'the quality or state of being truethe quality or state of being true', ''));
-    positiveWords.add(new Word.Construct(6005, 'only', '', ''));
-    positiveWords.add(new Word.Construct(6006, 'fast', '', ''));
-    positiveWords.add(new Word.Construct(6007, 'easy', '', ''));
-    positiveWords.add(new Word.Construct(6008, 'save', '', ''));
-    positiveWords.add(new Word.Construct(6009, 'win', '', ''));
-    positiveWords.add(new Word.Construct(60010, 'bonus', '', ''));
-    positiveWords.add(new Word.Construct(60011, 'never', '', ''));
+    positiveWords.add(new Word.Construct(6004, 'truth', 'the quality or state of being truethe quality or state of being true', 'tell me the truth'));
+    positiveWords.add(new Word.Construct(6005, 'only', 'and no one or nothing more besides; solely ', 'rebellion will only bring more unhappiness'));
+    positiveWords.add(new Word.Construct(6006, 'fast', 'moving or capable of moving at high speed', 'a fast and powerful car'));
+    positiveWords.add(new Word.Construct(6007, 'easy', 'achieved without great effort; presenting few difficulties', 'an easy way of retrieving information'));
+    positiveWords.add(new Word.Construct(6008, 'save', 'keep and store up (something, especially money) for future use', 'she had never been able to save much from her salary'));
+    positiveWords.add(new Word.Construct(6009, 'win', 'be successful or victorious in (a contest or conflict)', 'We will win this game'));
+    positiveWords.add(new Word.Construct(60010, 'bonus', 'a sum of money added to a person\'s wages as a reward for good performance', 'I got 10k dollar bonus from office'));
+    positiveWords.add(new Word.Construct(60011, 'never', 'at no time in the past or future; not ever', 'they had never been camping in their lives'));
 
     return positiveWords;
   }
