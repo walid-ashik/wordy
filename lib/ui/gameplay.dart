@@ -110,21 +110,27 @@ class _GamePlayPageState extends State<GamePlayPage> {
   void setCategoryList(String categoryName) {
     if (categoryName.toLowerCase() == Categories.preposition.toLowerCase()) {
       wordList = DataUtil.getPrepositionList();
-    } else if (categoryName.toLowerCase() == Categories.positive.toLowerCase()) {
+    } else if (categoryName.toLowerCase() ==
+        Categories.positive.toLowerCase()) {
       wordList = DataUtil.getPositiveWords();
-    } else if(categoryName.toLowerCase() == Categories.negative.toLowerCase()) {
+    } else if (categoryName.toLowerCase() ==
+        Categories.negative.toLowerCase()) {
       wordList = DataUtil.getNegativeWords();
-    } else if(categoryName.toLowerCase() == Categories.emotional.toLowerCase()){
+    } else if (categoryName.toLowerCase() ==
+        Categories.emotional.toLowerCase()) {
       wordList = DataUtil.getEmotionalWords();
-    }else if(categoryName.toLowerCase() == Categories.inspirational.toLowerCase()){
+    } else if (categoryName.toLowerCase() ==
+        Categories.inspirational.toLowerCase()) {
       wordList = DataUtil.getInspirationalWords();
-    }else if(categoryName.toLowerCase() == Categories.sales.toLowerCase()){
+    } else if (categoryName.toLowerCase() == Categories.sales.toLowerCase()) {
       wordList = DataUtil.getSalesWords();
-    }else if(categoryName.toLowerCase() == Categories.business.toLowerCase()) {
+    } else if (categoryName.toLowerCase() ==
+        Categories.business.toLowerCase()) {
       wordList = DataUtil.getBusinessWords();
-    }else if(categoryName.toLowerCase() == Categories.compliments.toLowerCase()) {
+    } else if (categoryName.toLowerCase() ==
+        Categories.compliments.toLowerCase()) {
       wordList = DataUtil.getComplimentWords();
-    }else {
+    } else {
       wordList = DataUtil.getPrepositionList();
     }
   }
@@ -193,20 +199,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
                   ),
                   Expanded(
                     child: IconButton(
-                      icon: Icon(Icons.autorenew, color: HexColor('#444444')),
-                      onPressed: () {
-                        setState(() {
-                          guessedWord = '';
-                          charList = getWordsLetterList(wordList[index].word);
-                          setState() {
-                            isGeneratedNewList = true;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: IconButton(
                       icon: Icon(Icons.arrow_forward_ios,
                           color: HexColor('#444444')),
                       onPressed: () {
@@ -223,6 +215,59 @@ class _GamePlayPageState extends State<GamePlayPage> {
                             showWrongAnswerDialog('can not go to next!');
                           }
                         });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon: Icon(Icons.autorenew, color: HexColor('#444444')),
+                      onPressed: () {
+                        setState(() {
+                          guessedWord = '';
+                          charList = getWordsLetterList(wordList[index].word);
+                          setState() {
+                            isGeneratedNewList = true;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon:
+                          Icon(Icons.info_outline, color: HexColor('#444444')),
+                      onPressed: () {
+                        setState(() {
+//                          guessedWord = '';
+                          var guessedLetterAfterHintAdded = '';
+                          var lengthOfGuessedWord = guessedWord.length;
+                          //let user get hint up to (last - 1) word
+                          if (lengthOfGuessedWord < correctWord.length - 1) {
+                            var hintLetter = getHintLetter(
+                                lengthOfGuessedWord++, correctWord);
+                            print('Hint Letter: $hintLetter');
+                            guessedLetterAfterHintAdded =
+                                '$guessedWord$hintLetter';
+                            print(
+                                'Hint guessedLetterAfterHintAdded: $guessedLetterAfterHintAdded');
+                            guessedWord = guessedLetterAfterHintAdded;
+
+                            if(guessedWord.length == correctWord.length){
+                              checkAnswer(wordList[index].meaning);
+                            }
+                          }
+
+                          if(lengthOfGuessedWord == correctWord.length - 1){
+                            //show are you freaking crazy. you need last word hint. fuck you dialog
+                            showAreYouCrazyYouCanGuessLastLetterDialog("Are you freaking crazy! you can't guess last letter?");
+                          }
+//
+//
+//                          setState() {
+////                            isGeneratedNewList = true;
+//                          }
+                        });
+                        //add new letter to guessedWord
                       },
                     ),
                   ),
@@ -420,6 +465,23 @@ class _GamePlayPageState extends State<GamePlayPage> {
       setState(() {
         Dialogs.showCorrectAnswerDialog(
             context, '$word is wrong guess!', '$meaning', 'Meaning:', false);
+        fillInTheBlankHint = preposition.fillInTheGapSentence
+            .replaceAll(correctWord, '________');
+        charList = getWordsLetterList(wordList[index].word);
+        guessedWord = '';
+      });
+    });
+  }
+
+  String getHintLetter(int index, String word) {
+    return word[index].toUpperCase();
+  }
+
+  void showAreYouCrazyYouCanGuessLastLetterDialog(String message) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      setState(() {
+        Dialogs.showCorrectAnswerDialog(
+            context, 'Hey Stupid!', '$message', 'Meaning:', false);
         fillInTheBlankHint = preposition.fillInTheGapSentence
             .replaceAll(correctWord, '________');
         charList = getWordsLetterList(wordList[index].word);

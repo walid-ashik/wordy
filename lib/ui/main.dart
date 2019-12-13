@@ -131,7 +131,7 @@ class _MyAppState extends State<MyApp> {
     await prefs.setString('inspirational', inspirationalListJsonString);
     await prefs.setString('sales', salesListJsonString);
     await prefs.setString('business', businessListJsonString);
-    await prefs.setString('sales', complimentListJsonString);
+    await prefs.setString('compliments', complimentListJsonString);
 
   }
 }
