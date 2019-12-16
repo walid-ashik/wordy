@@ -231,7 +231,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                                 isGeneratedNewList = true;
                               }
                             } else {
-                              showWrongAnswerDialog('can not go to next!');
+                              Dialogs.showLockedNewWordDialog(context);
                             }
                           });
                         },

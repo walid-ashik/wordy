@@ -47,6 +47,7 @@ flutter:
     - images/lock.png
     - images/img_correct.png
     - images/img_wrong_cross.png
+    - images/ic_lock_red.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
