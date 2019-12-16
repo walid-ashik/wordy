@@ -1,14 +1,28 @@
 import 'package:Wordy/ui/gameplay.dart';
+import 'package:Wordy/util/constant.dart';
 import 'package:Wordy/util/data_util.dart';
 import 'package:flutter/material.dart';
 import 'package:Wordy/util/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   var userPoints = 17;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserPoint();
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -124,6 +138,21 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  getUserPoint() async {
+    var prefes = await SharedPreferences.getInstance();
+
+    if(prefes.containsKey(Constant.USER_POINT_KEY)){
+      setState(() {
+        userPoints = prefes.getInt(Constant.USER_POINT_KEY);
+      });
+    } else {
+      setState(() {
+        userPoints = 0;
+      });
+    }
+
+  }
 }
 
 class Category {
@@ -140,7 +169,8 @@ class Word {
   String meaning;
   String fillInTheGapSentence;
 
-  Word.Construct(int id, String word, String meaning, String fillInTheGapSentence){
+  Word.Construct(
+      int id, String word, String meaning, String fillInTheGapSentence) {
     this.id = id;
     this.word = word;
     this.meaning = meaning;
@@ -152,7 +182,7 @@ class Word {
 
   Word({this.id, this.word, this.meaning, this.fillInTheGapSentence});
 
-  Map<String,dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     return {
       "id": this.id,
       "word": this.word,
@@ -161,7 +191,7 @@ class Word {
     };
   }
 
-  factory Word.fromJson(Map<String, dynamic> json){
+  factory Word.fromJson(Map<String, dynamic> json) {
     return Word(
       id: json['id'] as int,
       word: json['word'] as String,
@@ -170,13 +200,9 @@ class Word {
     );
   }
 
-
-  static List encondeToJson(List<Word>list){
+  static List encondeToJson(List<Word> list) {
     List jsonList = List();
-    list.map((item)=>
-        jsonList.add(item.toJson())
-    ).toList();
+    list.map((item) => jsonList.add(item.toJson())).toList();
     return jsonList;
   }
 }
-
