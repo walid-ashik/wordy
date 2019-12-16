@@ -152,6 +152,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
         }
       }
 
+      if(index == wordList.length) {
+        showWrongAnswerDialog('You have completed this list');
+        index = 0 ;
+      }
+
       preposition = wordList[index];
       totalScroe = wordList.length;
 
