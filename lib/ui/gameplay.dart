@@ -1,11 +1,11 @@
 import 'package:Wordy/ui/home.dart';
+import 'package:Wordy/util/constant.dart';
 import 'package:Wordy/util/data_util.dart';
 import 'package:Wordy/util/dialogs.dart';
 import 'package:Wordy/util/shared_preferences.dart';
 import 'package:Wordy/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -165,228 +165,245 @@ class _GamePlayPageState extends State<GamePlayPage> {
       meaning = preposition.meaning;
     }
 
-    return isLoaded
-        ? Scaffold(
-            backgroundColor: Colors.white,
-            bottomNavigationBar: BottomAppBar(
-              color: HexColor('${category.color}'),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                        color: HexColor('#444444'),
+    return WillPopScope(
+      onWillPop: onBackPressed,
+      child: isLoaded
+          ? Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      onBackPressed();
+                    }),
+              ),
+              bottomNavigationBar: BottomAppBar(
+                color: HexColor('${category.color}'),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          color: HexColor('#444444'),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            //do not go -1 index of word list cause that's impossible.
+                            //there is no word
+                            if (index != 0) {
+                              gotoPreviousWord();
+                              setState() {
+                                index--;
+                                isGeneratedNewList = true;
+                              }
+                            } else {
+                              //show no previous word dialog
+                              showWrongAnswerDialog('You can not go previous');
+                            }
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          //do not go -1 index of word list cause that's impossible.
-                          //there is no word
-                          if (index != 0) {
-                            gotoPreviousWord();
-                            setState() {
-                              index--;
-                              isGeneratedNewList = true;
-                            }
-                          } else {
-                            //show no previous word dialog
-                            showWrongAnswerDialog('You can not go previous');
-                          }
-                        });
-                      },
                     ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_forward_ios,
-                          color: HexColor('#444444')),
-                      onPressed: () {
-                        setState(() {
-                          var nextWordId = wordList[index].id.toString();
-                          if (prefes.containsKey(nextWordId)) {
-                            gotoNextWord();
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_forward_ios,
+                            color: HexColor('#444444')),
+                        onPressed: () {
+                          setState(() {
+                            var nextWordId = wordList[index].id.toString();
+                            if (prefes.containsKey(nextWordId)) {
+                              gotoNextWord();
 
+                              setState() {
+                                index++;
+                                isGeneratedNewList = true;
+                              }
+                            } else {
+                              showWrongAnswerDialog('can not go to next!');
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.autorenew, color: HexColor('#444444')),
+                        onPressed: () {
+                          setState(() {
+                            guessedWord = '';
+                            charList = getWordsLetterList(wordList[index].word);
                             setState() {
-                              index++;
                               isGeneratedNewList = true;
                             }
-                          } else {
-                            showWrongAnswerDialog('can not go to next!');
-                          }
-                        });
-                      },
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: Icon(Icons.autorenew, color: HexColor('#444444')),
-                      onPressed: () {
-                        setState(() {
-                          guessedWord = '';
-                          charList = getWordsLetterList(wordList[index].word);
-                          setState() {
-                            isGeneratedNewList = true;
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon:
-                          Icon(Icons.info_outline, color: HexColor('#444444')),
-                      onPressed: () {
-                        setState(() {
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.info_outline,
+                            color: HexColor('#444444')),
+                        onPressed: () {
+                          setState(() {
 //                          guessedWord = '';
-                          var guessedLetterAfterHintAdded = '';
-                          var lengthOfGuessedWord = guessedWord.length;
-                          //let user get hint up to (last - 1) word
-                          if (lengthOfGuessedWord < correctWord.length - 1) {
-                            var hintLetter = getHintLetter(
-                                lengthOfGuessedWord++, correctWord);
-                            print('Hint Letter: $hintLetter');
-                            guessedLetterAfterHintAdded =
-                                '$guessedWord$hintLetter';
-                            print(
-                                'Hint guessedLetterAfterHintAdded: $guessedLetterAfterHintAdded');
-                            guessedWord = guessedLetterAfterHintAdded;
+                            var guessedLetterAfterHintAdded = '';
+                            var lengthOfGuessedWord = guessedWord.length;
+                            //let user get hint up to (last - 1) word
+                            if (lengthOfGuessedWord < correctWord.length - 1) {
+                              var hintLetter = getHintLetter(
+                                  lengthOfGuessedWord++, correctWord);
+                              print('Hint Letter: $hintLetter');
+                              guessedLetterAfterHintAdded =
+                                  '$guessedWord$hintLetter';
+                              print(
+                                  'Hint guessedLetterAfterHintAdded: $guessedLetterAfterHintAdded');
+                              guessedWord = guessedLetterAfterHintAdded;
 
-                            if(guessedWord.length == correctWord.length){
-                              checkAnswer(wordList[index].meaning);
+                              if (guessedWord.length == correctWord.length) {
+                                checkAnswer(wordList[index].meaning);
+                              }
                             }
-                          }
 
-                          if(lengthOfGuessedWord == correctWord.length - 1){
-                            //show are you freaking crazy. you need last word hint. fuck you dialog
-                            showAreYouCrazyYouCanGuessLastLetterDialog("Are you freaking crazy! you can't guess last letter?");
-                          }
+                            if (lengthOfGuessedWord == correctWord.length - 1) {
+                              //show are you freaking crazy. you need last word hint. fuck you dialog
+                              showAreYouCrazyYouCanGuessLastLetterDialog(
+                                  "Are you freaking crazy! you can't guess last letter?");
+                            }
 //
 //
 //                          setState() {
 ////                            isGeneratedNewList = true;
 //                          }
-                        });
-                        //add new letter to guessedWord
-                      },
+                          });
+                          //add new letter to guessedWord
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              body: Column(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      '$index/$totalScroe',
+                      style: TextStyle(
+                          fontSize: 60.0,
+                          fontWeight: FontWeight.bold,
+                          color: HexColor('#D5D5D5')),
                     ),
                   ),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 100.0),
+                    child: guessedWord == ''
+                        ? Text(
+                            '$placeholder_guessed_word ',
+                            style: TextStyle(
+                                color: HexColor('#D5D5D5'),
+                                fontSize: 50.0,
+                                fontWeight: FontWeight.w500),
+                          )
+                        : Text(
+                            '$guessedWord',
+                            style: TextStyle(
+                                fontSize: 50.0, fontWeight: FontWeight.w500),
+                          ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 50.0),
+                      width: MediaQuery.of(context).size.width - 40.0,
+                      child: //Text(
+                          //'Fill in the gap:\n $fillInTheBlankHint;',
+                          //textAlign: TextAlign.center,
+                          //),
+                          RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text: 'Fill in the gap: ',
+                            style: TextStyle(
+                                color: HexColor('#444444'),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: '$fillInTheBlankHint',
+                                style: TextStyle(
+                                    color: HexColor('#444444'),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              TextSpan(
+                                  text: '\nMeaning: ',
+                                  style: TextStyle(
+                                    color: HexColor('#444444'),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              TextSpan(
+                                text: '$meaning;',
+                                style: TextStyle(
+                                    color: HexColor('#444444'),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ]),
+                      )),
+                  Container(
+                    height: 55.0,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: 50.0),
+                    child: new ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: charList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, i) {
+                          return GestureDetector(
+                            child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  var tappedLetter =
+                                      '$guessedWord${charList[i]}';
+                                  setState(() {
+                                    guessedWord = tappedLetter;
+                                  });
+                                  debugPrint('clicked');
+                                  checkAnswer(meaning);
+//                        debugPrint(charList[index]);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 55.0,
+                                  margin: EdgeInsets.all(2.0),
+                                  color: HexColor('${category.color}'),
+                                  child: Text(
+                                    charList[i],
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                          );
+                        }),
+                  )
                 ],
               ),
+            )
+          : Scaffold(
+              body: Center(
+                child: Text('No data found!'),
+              ),
             ),
-            body: Column(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 80.0),
-                  child: Text(
-                    '$index/$totalScroe',
-                    style: TextStyle(
-                        fontSize: 60.0,
-                        fontWeight: FontWeight.bold,
-                        color: HexColor('#D5D5D5')),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 100.0),
-                  child: guessedWord == ''
-                      ? Text(
-                          '$placeholder_guessed_word ',
-                          style: TextStyle(
-                              color: HexColor('#D5D5D5'),
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.w500),
-                        )
-                      : Text(
-                          '$guessedWord',
-                          style: TextStyle(
-                              fontSize: 50.0, fontWeight: FontWeight.w500),
-                        ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(top: 50.0),
-                    width: MediaQuery.of(context).size.width - 40.0,
-                    child: //Text(
-                        //'Fill in the gap:\n $fillInTheBlankHint;',
-                        //textAlign: TextAlign.center,
-                        //),
-                        RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text: 'Fill in the gap: ',
-                          style: TextStyle(
-                              color: HexColor('#444444'),
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '$fillInTheBlankHint',
-                              style: TextStyle(
-                                  color: HexColor('#444444'),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                            TextSpan(
-                                text: '\nMeaning: ',
-                                style: TextStyle(
-                                  color: HexColor('#444444'),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            TextSpan(
-                              text: '$meaning;',
-                              style: TextStyle(
-                                  color: HexColor('#444444'),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal),
-                            )
-                          ]),
-                    )),
-                Container(
-                  height: 55.0,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 50.0),
-                  child: new ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: charList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, i) {
-                        return GestureDetector(
-                          child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                var tappedLetter = '$guessedWord${charList[i]}';
-                                setState(() {
-                                  guessedWord = tappedLetter;
-                                });
-                                debugPrint('clicked');
-                                checkAnswer(meaning);
-//                        debugPrint(charList[index]);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 55.0,
-                                margin: EdgeInsets.all(2.0),
-                                color: HexColor('${category.color}'),
-                                child: Text(
-                                  charList[i],
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
-                        );
-                      }),
-                )
-              ],
-            ),
-          )
-        : Scaffold(
-            body: Center(
-              child: Text('No data found!'),
-            ),
-          );
+    );
   }
 
   void gotoNextWord() {
@@ -428,8 +445,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
   void checkAnswer(String meaning) {
     debugPrint('$guessedWord != $correctWord');
     if (guessedWord.toLowerCase() == correctWord.toLowerCase()) {
-      debugPrint("Answer is correct");
-      print('correct ans word id: ${wordList[index].id.toString()}');
+      //save user point first then
+      saveUserPoint(wordList[index].id.toString());
+
+      //remember if user played this word before. if played this before then user
+      //won't get any point for playing same word again
       prefes.setString(wordList[index].id.toString(), '');
       //set last index that user answered correctly
       var categoryName = category.name.toLowerCase();
@@ -488,6 +508,24 @@ class _GamePlayPageState extends State<GamePlayPage> {
         guessedWord = '';
       });
     });
+  }
+
+  void saveUserPoint(String wordId) {
+    int userPoint = 0;
+    if (!prefes.containsKey(wordId)) {
+      if (prefes.containsKey(Constant.USER_POINT_KEY)) {
+        userPoint = prefes.getInt(Constant.USER_POINT_KEY);
+      }
+      //add this point to user point
+      userPoint++;
+
+      prefes.setInt(Constant.USER_POINT_KEY, userPoint);
+    }
+  }
+
+  Future<bool> onBackPressed() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => HomePage(true)));
   }
 }
 

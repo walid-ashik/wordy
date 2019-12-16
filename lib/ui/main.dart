@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => HomePage(false),
           ),
         );
       },

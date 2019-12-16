@@ -6,22 +6,51 @@ import 'package:Wordy/util/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
+  bool isComingFromNextPage = false;
+  HomePage(this.isComingFromNextPage) : super();
+
   @override
-  State<StatefulWidget> createState() => _HomePageState();
+  State<StatefulWidget> createState() => _HomePageState(isComingFromNextPage);
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   var userPoints = 17;
+  bool isComingFromNewPage;
+  _HomePageState(bool isComingFromNewPage){
+    this.isComingFromNewPage = isComingFromNewPage;
+  }
 
   @override
   void initState() {
     super.initState();
     getUserPoint();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.resumed){
+      //reload user point
+      getUserPoint();
+    }
+
+    print('user state: $state');
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
+    if(isComingFromNewPage) {
+      getUserPoint();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -63,21 +92,9 @@ class _HomePageState extends State<HomePage> {
     return categoires;
   }
 
-//  List<Category> getCategories() {
-//    List<Category> categoires = new List();
-//    categoires.add(new Category("Level 1", "#FBCA93", true));
-//    categoires.add(new Category("Level 2", "#A4FB93", false));
-//    categoires.add(new Category("Level 3", "#7AFBF2", false));
-//    categoires.add(new Category("Level 4", "#7AA9FB", false));
-//    categoires.add(new Category("Level 5", "#D487F9", false));
-//    categoires.add(new Category("Level 6", "#F98787", false));
-//    return categoires;
-//  }
 
   Widget getCategoryListView() {
     var categories = getCategories();
-
-    AssetImage lockImage = AssetImage('images/lock.png');
 
     return ListView.builder(
         itemCount: categories.length,
@@ -131,7 +148,7 @@ class _HomePageState extends State<HomePage> {
 
   void gotoGamePlay(BuildContext context, Category category) {
     //goto home page
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => GamePlayPage(category),
@@ -145,6 +162,7 @@ class _HomePageState extends State<HomePage> {
     if(prefes.containsKey(Constant.USER_POINT_KEY)){
       setState(() {
         userPoints = prefes.getInt(Constant.USER_POINT_KEY);
+        print('user point: $userPoints');
       });
     } else {
       setState(() {
