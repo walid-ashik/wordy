@@ -152,9 +152,9 @@ class _GamePlayPageState extends State<GamePlayPage> {
         }
       }
 
-      if(index == wordList.length) {
+      if (index == wordList.length) {
         showWrongAnswerDialog('You have completed this list');
-        index = 0 ;
+        index = 0;
       }
 
       preposition = wordList[index];
@@ -210,7 +210,8 @@ class _GamePlayPageState extends State<GamePlayPage> {
                               }
                             } else {
                               //show no previous word dialog
-                              showWrongAnswerDialog('You can not go previous');
+//                              showWrongAnswerDialog('You can not go previous');
+                              print('no going back!');
                             }
                           });
                         },
@@ -276,10 +277,20 @@ class _GamePlayPageState extends State<GamePlayPage> {
                               }
                             }
 
-                            if (lengthOfGuessedWord == correctWord.length - 1) {
+                            if (guessedWord.length == correctWord.length - 1) {
                               //show are you freaking crazy. you need last word hint. fuck you dialog
-                              showAreYouCrazyYouCanGuessLastLetterDialog(
-                                  "Are you freaking crazy! you can't guess last letter?");
+
+                              setState(() {
+                                Fluttertoast.showToast(
+                                    msg: "Seriously! You can\'t guess the last letter!",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+                              });
                             }
 //
 //
