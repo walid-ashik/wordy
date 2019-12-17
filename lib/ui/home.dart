@@ -61,17 +61,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         toolbarOpacity: 0.5,
         title: Text(
           "Categories",
-          style: TextStyle(color: HexColor('#444444'), fontSize: 14.0),
+          style: TextStyle(color: HexColor('#444444'), fontSize: 14.0, fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
           Center(
-            child: Text(
-              "Point: $userPoints      ",
-              style: TextStyle(
-                  color: HexColor('#444444'),
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w600),
-            ),
+            child: RichText(
+              text: TextSpan(
+                text: 'Your Point: ',
+                style: TextStyle(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.normal),
+                children: <TextSpan>[
+                  TextSpan(text: '$userPoints     ', style: TextStyle(fontWeight: FontWeight.bold))
+                ]
+              ),
+            )
           )
         ],
       ),

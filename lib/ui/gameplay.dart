@@ -279,7 +279,6 @@ class _GamePlayPageState extends State<GamePlayPage> {
 
                             if (guessedWord.length == correctWord.length - 1) {
                               //show are you freaking crazy. you need last word hint. fuck you dialog
-
                               setState(() {
                                 Fluttertoast.showToast(
                                     msg: "Seriously! You can\'t guess the last letter!",
