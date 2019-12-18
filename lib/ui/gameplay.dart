@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 
 class GamePlayPage extends StatefulWidget {
   final Category category;
@@ -19,6 +20,7 @@ class GamePlayPage extends StatefulWidget {
 }
 
 class _GamePlayPageState extends State<GamePlayPage> {
+  AdmobInterstitial _admobInterstitial;
   Category category;
   var homeText = "";
   var userScore = 1;
@@ -47,8 +49,12 @@ class _GamePlayPageState extends State<GamePlayPage> {
 
   @override
   void initState() {
+//    Admob.initialize('com.invalidco.flutter_app');
     super.initState();
     loadJson();
+    Admob.initialize('com.invalidco.flutter_app');
+    _admobInterstitial = createAdvert();
+    _admobInterstitial.load();
   }
 
   void showToast(String message) {
@@ -281,14 +287,14 @@ class _GamePlayPageState extends State<GamePlayPage> {
                               //show are you freaking crazy. you need last word hint. fuck you dialog
                               setState(() {
                                 Fluttertoast.showToast(
-                                    msg: "Seriously! You can\'t guess the last letter!",
+                                    msg:
+                                        "Seriously! You can\'t guess the last letter!",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
                                     timeInSecForIos: 1,
                                     backgroundColor: Colors.black,
                                     textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
+                                    fontSize: 16.0);
                               });
                             }
 //
@@ -504,6 +510,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
             .replaceAll(correctWord, '________');
         charList = getWordsLetterList(wordList[index].word);
         guessedWord = '';
+        _admobInterstitial.show();
       });
     });
   }
@@ -541,6 +548,31 @@ class _GamePlayPageState extends State<GamePlayPage> {
   Future<bool> onBackPressed() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePage(true)));
+  }
+
+  AdmobInterstitial createAdvert() {
+
+    //print('Admob createAdvert(): ${_admobInterstitial.isLoaded}');
+
+    return AdmobInterstitial(
+        adUnitId: Constant.TEST_INTESTITIAL_AD_ID,
+        listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+
+          print('Admob: listenr ${_admobInterstitial.isLoaded.toString()}');
+
+          if (event == AdmobAdEvent.loaded) {
+            //load and suddenly ad shows and this is very risky way cause
+            //you never know when the ad will show and it will pop up
+            //suddenly and it against the rule of admob
+            //_admobInterstitial.show();
+            print('Admob: Ad is loaded');
+          } else if (event == AdmobAdEvent.closed) {
+            print('Admob: ad is closed');
+//            _admobInterstitial.dispose();
+            _admobInterstitial.load();
+            print('Admob: closed ${_admobInterstitial.isLoaded.toString()}');
+          }
+        });
   }
 }
 
