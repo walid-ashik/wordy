@@ -89,7 +89,7 @@ class Dialogs {
                                         fontWeight: FontWeight.bold),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: '$meaning',
+                                        text: '$meaning;',
                                         style: TextStyle(
                                             color: HexColor('#444444'),
                                             fontSize: 14.0,

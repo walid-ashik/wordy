@@ -7,16 +7,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   bool isComingFromNextPage = false;
+
   HomePage(this.isComingFromNextPage) : super();
 
   @override
   State<StatefulWidget> createState() => _HomePageState(isComingFromNextPage);
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   var userPoints = 17;
   bool isComingFromNewPage;
-  _HomePageState(bool isComingFromNewPage){
+  double _contentFontSize = 0;
+
+  _HomePageState(bool isComingFromNewPage) {
     this.isComingFromNewPage = isComingFromNewPage;
   }
 
@@ -25,6 +28,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     super.initState();
     getUserPoint();
     WidgetsBinding.instance.addObserver(this);
+    showRatingDialog();
   }
 
   @override
@@ -36,9 +40,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       //reload user point
       getUserPoint();
+      showRatingDialogIfUserScoredAtLeasetFivePoints();
     }
 
     print('user state: $state');
@@ -48,7 +53,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    if(isComingFromNewPage) {
+    if (isComingFromNewPage) {
       getUserPoint();
     }
 
@@ -61,20 +66,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         toolbarOpacity: 0.5,
         title: Text(
           "Categories",
-          style: TextStyle(color: HexColor('#444444'), fontSize: 14.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: HexColor('#444444'),
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
           Center(
-            child: RichText(
-              text: TextSpan(
+              child: RichText(
+            text: TextSpan(
                 text: 'Your Point: ',
-                style: TextStyle(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.normal),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.normal),
                 children: <TextSpan>[
-                  TextSpan(text: '$userPoints     ', style: TextStyle(fontWeight: FontWeight.bold))
-                ]
-              ),
-            )
-          )
+                  TextSpan(
+                      text: '$userPoints     ',
+                      style: TextStyle(fontWeight: FontWeight.bold))
+                ]),
+          ))
         ],
       ),
       body: getCategoryListView(),
@@ -93,7 +104,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     categoires.add(new Category(Categories.compliments, "#A4FB93", false));
     return categoires;
   }
-
 
   Widget getCategoryListView() {
     var categories = getCategories();
@@ -161,7 +171,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   getUserPoint() async {
     var prefes = await SharedPreferences.getInstance();
 
-    if(prefes.containsKey(Constant.USER_POINT_KEY)){
+    if (prefes.containsKey(Constant.USER_POINT_KEY)) {
       setState(() {
         userPoints = prefes.getInt(Constant.USER_POINT_KEY);
         print('user point: $userPoints');
@@ -171,7 +181,132 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         userPoints = 0;
       });
     }
+  }
 
+  void showRatingDialogIfUserScoredAtLeasetFivePoints() async {
+    //check first if user ticked remind me later
+    //if user closes then do not show the dialog again
+    var prefes = await SharedPreferences.getInstance();
+
+    if (prefes.getBool('user_selected_remind_me_later')) {
+      //show dialog again
+      return;
+    }
+
+    if (prefes.getBool('user_closed_dialog')) {
+      //set user selects remind me later to FALSE
+      //
+      return;
+    }
+
+    if (userPoints > 4) {
+      //show dialog
+      //and remember user preferences
+
+    }
+
+//    showRatingDialog();
+  }
+
+  void showRatingDialog() async {
+    //need to wait few seconds otherwise showDialog() can't be called inside
+    //initState method
+    await Future.delayed(Duration(milliseconds: 50));
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter stateSetter) {
+              return Dialog(
+                child: Container(
+                  height: 350,
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                        alignment: FractionalOffset.topCenter,
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          margin: EdgeInsets.only(top: 40.0),
+                          child: Image.asset(
+                            'images/smile.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: FractionalOffset.topCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 20.0),
+                          child: Text('Do you like the app?',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      Align(
+                        alignment: FractionalOffset.topCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 15.0, bottom: 10.0),
+                          child: Text(
+                            'Use the slider to tell it in the\nin the language of emojis.',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Slider.adaptive(
+                        value: 1,
+                        onChanged: (newRating) {
+                          stateSetter(() {
+                            _contentFontSize = newRating;
+                          });
+                          setState(() {
+                            _contentFontSize = newRating;
+                          });
+                        },
+                        min: 0.0,
+                        max: 2.0,
+                        label: '$_contentFontSize',
+                      ),
+                      Expanded(
+                        child: Align(
+                            alignment: FractionalOffset.bottomCenter,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                        height: 50.0,
+                                        color: Colors.blue[400],
+                                        child: Center(
+                                            child: Text(
+                                          'DISMISS',
+                                          style: TextStyle(color: Colors.white),
+                                        ))),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                        height: 50.0,
+                                        color: Colors.blue,
+                                        child: Center(
+                                            child: Text('SUBMIT',
+                                                style: TextStyle(
+                                                    color: Colors.white)))),
+                                  )
+                                ],
+                              ),
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
+          );
+        });
   }
 }
 

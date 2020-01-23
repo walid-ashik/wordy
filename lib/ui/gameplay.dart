@@ -492,7 +492,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
         Dialogs.showCorrectAnswerDialog(
             context,
             '$guessedWord is a right guess!',
-            '$meaning;',
+            '$meaning',
             '$guessedWord: ',
             true);
         userScore++;
